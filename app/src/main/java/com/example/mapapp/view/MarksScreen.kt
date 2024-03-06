@@ -1,4 +1,4 @@
-package com.example.mapapp
+package com.example.mapapp.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,23 +12,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
-@Composable
-fun MapScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        val itb = LatLng(41.4534265, 2.1837151)
-        val cameraPositionState = rememberCameraPositionState{
-            position = CameraPosition.fromLatLngZoom(itb, 10f)
-        }
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxSize(),
-            cameraPositionState = cameraPositionState
-        ) {
 
-        }
-    }
+@Composable
+fun MarksScreen(navController: NavController) {
+
 }
