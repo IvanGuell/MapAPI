@@ -1,5 +1,7 @@
 package com.example.mapapp.viewModel
 
+import android.graphics.Bitmap
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,7 +37,9 @@ class MapViewModel: ViewModel() {
         _show.value = show.value != true
     }
 
-
+    @Composable
+    fun CameraCapture(onPhotoCaptured: (Bitmap) -> Unit) {
+    }
 
 
 }
