@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -34,7 +37,10 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -50,6 +56,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.BottomNavigationScreens
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.ui.theme.MapAppTheme
+import com.example.mapapp.view.AddMarkerBottomSheet
 import com.example.mapapp.view.MapScreen
 import com.example.mapapp.viewModel.MapViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -173,6 +180,7 @@ fun MySearchBar(mapViewModel: MapViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ScaffoldMenu(
     navigationController: NavHostController,
@@ -181,6 +189,8 @@ fun ScaffoldMenu(
     scope: CoroutineScope,
     bottomNavigationItems: List<BottomNavigationScreens>
 ) {
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
     Scaffold(
         bottomBar = { MyBottomAppBar(navigationController, bottomNavigationItems) },
         topBar = { MyTopAppBar(navigationController, mapViewModel, state, scope) }
@@ -196,12 +206,33 @@ fun ScaffoldMenu(
                 startDestination = Routes.MapScreen.route
             ) {
                 composable(Routes.MapScreen.route) {
-                    MapScreen(navigationController)
+                    MapScreen(
+                        navController = navigationController,
+                        viewModel = mapViewModel,
+                        onMarkerAdded = {
+                            // Update the state to show the BottomSheet
+                            isBottomSheetVisible = true
+                        }
+                    )
+                }
+            }
+
+            if (isBottomSheetVisible) {
+                ModalBottomSheetLayout(
+                    sheetContent = {
+                        AddMarkerBottomSheet(
+                            onAddMarker = {
+                                isBottomSheetVisible = false
+                            }
+                        )
+                    }
+                ) {
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun MyDrawer(mapViewModel: MapViewModel, bottomNavigationItems: List<BottomNavigationScreens>) {
@@ -209,7 +240,8 @@ fun MyDrawer(mapViewModel: MapViewModel, bottomNavigationItems: List<BottomNavig
     val scope = rememberCoroutineScope()
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    ModalNavigationDrawer(drawerState = state, gesturesEnabled = true, drawerContent = {
+    ModalNavigationDrawer(drawerState = state, modifier = Modifier.clickable { scope.launch { state.close() } },
+        gesturesEnabled = state.isOpen, drawerContent = {
         ModalDrawerSheet {
 
             Icon(imageVector = Icons.Filled.Menu, contentDescription = "Search")
@@ -222,6 +254,7 @@ fun MyDrawer(mapViewModel: MapViewModel, bottomNavigationItems: List<BottomNavig
                         state.close()
                     }
                     navigationController.navigate(Routes.MapScreen.route)
+
                 })
             Divider()
             NavigationDrawerItem(label = { Text(text = "Marker List") },

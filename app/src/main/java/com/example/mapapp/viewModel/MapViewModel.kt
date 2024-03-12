@@ -1,7 +1,9 @@
 package com.example.mapapp.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
 
 class MapViewModel: ViewModel() {
     private val _loading = MutableLiveData(true)
@@ -13,11 +15,19 @@ class MapViewModel: ViewModel() {
     private val _show = MutableLiveData<Boolean>()
     val show = _show
 
+    private val _selectedMarkerPosition = MutableLiveData<LatLng?>()
+    val selectedMarkerPosition: LiveData<LatLng?> get() = _selectedMarkerPosition
+
+    fun onMapLongClick(position: LatLng) {
+        _selectedMarkerPosition.value = position
+    }
+
+    fun onAddMarkerButtonClick() {
+        _selectedMarkerPosition.value = null
+    }
     fun onSearchTextChange(text: String?) {
-        // Verifica si el texto no es nulo antes de realizar la búsqueda
         text?.let {
-            // Realiza la búsqueda o cualquier acción que necesites con el texto no nulo
-            // Por ejemplo, puedes imprimir el texto de búsqueda
+
             println("Texto de búsqueda: $it")
         }
     }
