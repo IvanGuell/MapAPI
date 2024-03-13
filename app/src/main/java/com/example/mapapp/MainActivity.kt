@@ -35,10 +35,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -185,9 +182,6 @@ fun ScaffoldMenu(
     scope: CoroutineScope,
     bottomNavigationItems: List<BottomNavigationScreens>
 ) {
-    var isCameraOpen by remember { mutableStateOf(false) }
-
-
     Scaffold(
         bottomBar = { MyBottomAppBar(navigationController, bottomNavigationItems) },
         topBar = { MyTopAppBar(navigationController, mapViewModel, state, scope) }
@@ -218,41 +212,41 @@ fun MyDrawer(mapViewModel: MapViewModel, bottomNavigationItems: List<BottomNavig
 
     ModalNavigationDrawer(drawerState = state, modifier = Modifier.clickable { scope.launch { state.close() } },
         gesturesEnabled = state.isOpen, drawerContent = {
-        ModalDrawerSheet {
+            ModalDrawerSheet {
 
-            Icon(imageVector = Icons.Filled.Menu, contentDescription = "Search")
-            Text("Menu", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineLarge)
-            Divider()
-            NavigationDrawerItem(label = { Text(text = "Map") },
-                selected = false,
-                onClick = {
-                    scope.launch {
-                        state.close()
-                    }
-                    navigationController.navigate(Routes.MapScreen.route)
+                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Search")
+                Text("Menu", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineLarge)
+                Divider()
+                NavigationDrawerItem(label = { Text(text = "Map") },
+                    selected = false,
+                    onClick = {
+                        scope.launch {
+                            state.close()
+                        }
+                        navigationController.navigate(Routes.MapScreen.route)
 
-                })
-            Divider()
-            NavigationDrawerItem(label = { Text(text = "Marker List") },
-                selected = false,
-                onClick = {
-                    scope.launch {
-                        state.close()
-                    }
-                    navigationController.navigate(Routes.MarksScreen.route)
-                })
-            Divider()
-            NavigationDrawerItem(label = { Text(text =  "Add Marker") },
-                selected = false,
-                onClick = {
-                    scope.launch {
-                        state.close()
-                    }
-                    navigationController.navigate(Routes.MarksScreen.route)
-                })
+                    })
+                Divider()
+                NavigationDrawerItem(label = { Text(text = "Marker List") },
+                    selected = false,
+                    onClick = {
+                        scope.launch {
+                            state.close()
+                        }
+                        navigationController.navigate(Routes.MarksScreen.route)
+                    })
+                Divider()
+                NavigationDrawerItem(label = { Text(text =  "Add Marker") },
+                    selected = false,
+                    onClick = {
+                        scope.launch {
+                            state.close()
+                        }
+                        navigationController.navigate(Routes.MarksScreen.route)
+                    })
 
-        }
-    }) {
+            }
+        }) {
         ScaffoldMenu(navigationController, mapViewModel, state, scope, bottomNavigationItems)
     }
 }
@@ -268,4 +262,3 @@ private fun openBurgerMenu(state: DrawerState, scope: CoroutineScope) {
         Icon(imageVector = Icons.Filled.Menu, contentDescription = "BurgerMenu")
     }
 }
-
