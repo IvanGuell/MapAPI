@@ -32,7 +32,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.mapapp.viewModel.MapViewModel
+import com.example.mapapp.MyDrawer
+import com.example.mapapp.viewmodel.MapViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker

@@ -1,23 +1,11 @@
-package com.example.mapapp.viewModel
+package com.example.mapapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 
-class MapViewModel: ViewModel() {
-    private val _loading = MutableLiveData(true)
-    val loading = _loading
-
-    private val _searchText = MutableLiveData<String>()
-    val searchText = _searchText
-
-    private val _show = MutableLiveData<Boolean>()
-    val show = _show
-
-    private val _selectedMarkerPosition = MutableLiveData<LatLng?>()
-    val selectedMarkerPosition: LiveData<LatLng?> get() = _selectedMarkerPosition
+class MapViewModel : ViewModel() {
 
     private var position = LatLng(41.4534265, 2.1837151)
     fun changePosition(positionNueva: LatLng) {
@@ -49,7 +37,7 @@ class MapViewModel: ViewModel() {
     fun onSearchTextChange(keyword: String) {
         val allMarkers = _markers.value.orEmpty()
         if (keyword.isNotBlank()) {
-            val filteredMarkers = allMarkers.filter{ it.title!!.contains(keyword, ignoreCase = true) }
+            val filteredMarkers = allMarkers.filter{ it.title.contains(keyword, ignoreCase = true) }
             _searchedMarkers.value = filteredMarkers
         } else {
             _searchedMarkers.value = allMarkers
@@ -57,5 +45,7 @@ class MapViewModel: ViewModel() {
     }
 }
 
-
-
+data class Marker(
+    val position: LatLng,
+    val title: String,
+    val snippet: String)
