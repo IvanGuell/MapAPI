@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -197,7 +196,7 @@ fun ScaffoldMenu(
                 startDestination = Routes.MapScreen.route
             ) {
                 composable(Routes.MapScreen.route) {
-                    MapScreen(navigationController)
+                    MapScreen(navigationController, mapViewModel)
                 }
             }
         }
@@ -210,43 +209,41 @@ fun MyDrawer(mapViewModel: MapViewModel, bottomNavigationItems: List<BottomNavig
     val scope = rememberCoroutineScope()
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    ModalNavigationDrawer(drawerState = state, modifier = Modifier.clickable { scope.launch { state.close() } },
-        gesturesEnabled = state.isOpen, drawerContent = {
-            ModalDrawerSheet {
+    ModalNavigationDrawer(drawerState = state, gesturesEnabled = true, drawerContent = {
+        ModalDrawerSheet {
 
-                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Search")
-                Text("Menu", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineLarge)
-                Divider()
-                NavigationDrawerItem(label = { Text(text = "Map") },
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            state.close()
-                        }
-                        navigationController.navigate(Routes.MapScreen.route)
+            Icon(imageVector = Icons.Filled.Menu, contentDescription = "Search")
+            Text("Menu", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineLarge)
+            Divider()
+            NavigationDrawerItem(label = { Text(text = "Map") },
+                selected = false,
+                onClick = {
+                    scope.launch {
+                        state.close()
+                    }
+                    navigationController.navigate(Routes.MapScreen.route)
+                })
+            Divider()
+            NavigationDrawerItem(label = { Text(text = "Marker List") },
+                selected = false,
+                onClick = {
+                    scope.launch {
+                        state.close()
+                    }
+                    navigationController.navigate(Routes.MarksScreen.route)
+                })
+            Divider()
+            NavigationDrawerItem(label = { Text(text =  "Add Marker") },
+                selected = false,
+                onClick = {
+                    scope.launch {
+                        state.close()
+                    }
+                    navigationController.navigate(Routes.MarksScreen.route)
+                })
 
-                    })
-                Divider()
-                NavigationDrawerItem(label = { Text(text = "Marker List") },
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            state.close()
-                        }
-                        navigationController.navigate(Routes.MarksScreen.route)
-                    })
-                Divider()
-                NavigationDrawerItem(label = { Text(text =  "Add Marker") },
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            state.close()
-                        }
-                        navigationController.navigate(Routes.MarksScreen.route)
-                    })
-
-            }
-        }) {
+        }
+    }) {
         ScaffoldMenu(navigationController, mapViewModel, state, scope, bottomNavigationItems)
     }
 }
