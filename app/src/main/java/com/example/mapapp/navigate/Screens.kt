@@ -1,12 +1,9 @@
 package com.example.mapapp.navigate
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screens(
@@ -42,8 +39,3 @@ sealed class Screens(
         }
 }
 
-val screensFromDrawer = listOf(
-        Screens.DrawerScreens.Mapa,
-        Screens.DrawerScreens.Listar,
-        Screens.DrawerScreens.PositionMarker
-)

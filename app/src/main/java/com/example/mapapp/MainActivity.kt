@@ -48,13 +48,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.view.Lista
-import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.PositionMarker
 import com.example.mapapp.viewmodel.MapViewModel
+import com.example.sergiitb_pr04_maps_app.view.MapScreen
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
