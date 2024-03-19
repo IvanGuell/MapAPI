@@ -3,6 +3,9 @@ package com.example.mapapp.view
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
@@ -151,4 +155,38 @@ fun CameraScreen(navController: NavController, mapViewModel: MapViewModel) {
     if(showPermissionDenied){
         PermissionDeclinedScreen()
         }
+}
+
+@Composable
+fun PermissionDeclinedScreen() {
+    val context = LocalContext.current
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(text = "Permission Required", fontWeight = FontWeight.Bold)
+        Text(text = "You need to grant camera permission to take a photo")
+        Button(onClick = {
+            openAppSettings(context as Activity)
+
+        }) {
+            Text(text = "Open Settings")
+        }
+
+
+
+    }
+}
+
+
+fun openAppSettings(activity: Activity){
+    val intent = Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = Uri.fromParts("package", activity.packageName, null)
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+    }
+    activity.startActivity(intent)
+
 }
