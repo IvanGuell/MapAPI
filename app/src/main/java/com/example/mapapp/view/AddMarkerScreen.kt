@@ -85,11 +85,10 @@ fun AddMarkerScreen(
             ) {
                 Text("GUARDAR")
             }
-            Spacer(modifier = 16.dp)
             Button(
                 onClick = {
                     CameraScreen(navController = navController, mapViewModel = mapViewModel)
-C                },
+                },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
             ) {
@@ -139,11 +138,17 @@ fun CameraScreen(navController: NavController, mapViewModel: MapViewModel) {
                         if (!isCameraPermissionGranted) {
                             launcher.launch(Manifest.permission.CAMERA)
                         }else {
-                            navigationController.navigate(Routes.TakePhotoScreen.route)
+                            navController.navigate(Routes.TakePhotoScreen.route)
                         }
 
 
+                    }) {
+                        Text("Take photo")
                     }
 
+
                 }
+    if(showPermissionDenied){
+        PermissionDeclinedScreen()
+        }
 }
