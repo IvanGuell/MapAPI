@@ -53,24 +53,16 @@ android {
 }
 
 dependencies {
-    // CameraX core library using the camera2 implementation
-    // The following line is optional, as the core library is included indirectly by camera-camera2
-    val camerax_version = "1.4.0-alpha04"
-    implementation ("androidx.camera:camera-core:${camerax_version}")
-    implementation ("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-core:1.3.2")
+    implementation("androidx.camera:camera-camera2:1.3.2")
+    implementation("androidx.camera:camera-lifecycle:1.3.2")
+    implementation("androidx.camera:camera-view:1.3.2")
+    implementation("androidx.camera:camera-extensions:1.3.2")
+//Icons
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
     implementation("com.google.accompanist:accompanist-permissions:0.28.0")
 
-    // If you want to additionally use the CameraX Lifecycle library
 
-    implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
-    // If you want to additionally use the CameraX VideoCapture library
-    implementation ("androidx.camera:camera-video:${camerax_version}")
-    // If you want to additionally use the CameraX View class
-    implementation ("androidx.camera:camera-view:${camerax_version}")
-    // If you want to additionally add CameraX ML Kit Vision Integration
-    implementation ("androidx.camera:camera-mlkit-vision:${camerax_version}")
-    // If you want to additionally use the CameraX Extensions library
-    implementation ("androidx.camera:camera-extensions:${camerax_version}")
     implementation ("androidx.compose.material3:material3:1.2.0-alpha02")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.2")
     implementation("androidx.compose.material:material:1.6.2")

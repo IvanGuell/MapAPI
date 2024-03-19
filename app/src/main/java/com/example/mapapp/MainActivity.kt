@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,9 +49,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.view.Lista
+import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.PositionMarker
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.sergiitb_pr04_maps_app.view.MapScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -112,6 +113,7 @@ fun MyDrawer(
     ModalNavigationDrawer(
         drawerState = state,
         gesturesEnabled = false,
+        modifier = Modifier.clickable { scope.launch { state.close() } },
         drawerContent = {
             ModalDrawerSheet {
                 IconButton(

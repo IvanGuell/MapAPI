@@ -1,4 +1,5 @@
-package com.example.sergiitb_pr04_maps_app.view
+package com.example.mapapp.view
+
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
