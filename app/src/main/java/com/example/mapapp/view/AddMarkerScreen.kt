@@ -27,7 +27,6 @@ import com.example.mapapp.viewmodel.MapViewModel
 import com.example.mapapp.viewmodel.Marker
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMarkerScreen(
     mapViewModel: MapViewModel,
