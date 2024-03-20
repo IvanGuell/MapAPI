@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import com.example.mapapp.MyDrawer
 import com.example.mapapp.viewmodel.MapViewModel
 import com.example.mapapp.viewmodel.Marker
-
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
@@ -74,7 +73,9 @@ fun MapScreen(
                                             showBottomSheet = false
                                         }
                                     }
-                                }
+                                },
+                                navController = navController
+
                             )
                         }
                     }

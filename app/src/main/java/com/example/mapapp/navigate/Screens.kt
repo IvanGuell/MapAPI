@@ -25,7 +25,7 @@ sealed class Screens(
 
                 object Listar : DrawerScreens
                         (
-                        Routes.Lista.route,
+                        Routes.List.route,
                         Icons.Filled.List,
                         "My flurry points"
                 )

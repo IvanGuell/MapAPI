@@ -1,11 +1,9 @@
 package com.example.mapapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -41,16 +38,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.Routes
-import com.example.mapapp.view.Lista
+import com.example.mapapp.view.List
 import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.PositionMarker
+import com.example.mapapp.view.TakePhotoScreen
 import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -84,12 +81,16 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.MapScreen.route) {
                     MapScreen(navigationController, mapViewModel)
                 }
-                composable(Routes.Lista.route) {
-                    Lista(navigationController, mapViewModel)
+                composable(Routes.List.route) {
+                    List(navigationController, mapViewModel)
                 }
                 composable(Routes.PositionMarker.route) {
                     PositionMarker(navigationController, mapViewModel)
                 }
+                composable(Routes.TakePhotoScreen.route) {
+                    TakePhotoScreen(navigationController, mapViewModel)
+                }
+
             }
         }
     }
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
 
 val screensFromDrawer = listOf(
     Routes.MapScreen,
-    Routes.Lista,
+    Routes.List,
     Routes.PositionMarker
 )
 

@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -91,7 +90,7 @@ fun AddMarkerScreen(
             }
             Button(
                 onClick = {
-                    CameraScreen(navController = navController, mapViewModel = mapViewModel)
+                    navController.navigate(Routes.TakePhotoScreen.route)
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
@@ -132,29 +131,29 @@ fun CameraScreen(navController: NavController, mapViewModel: MapViewModel) {
         }
     )
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
 
-                ) {
-                    Button(onClick = {
-                        if (!isCameraPermissionGranted) {
-                            launcher.launch(Manifest.permission.CAMERA)
-                        }else {
-                            navController.navigate(Routes.TakePhotoScreen.route)
-                        }
-
-
-                    }) {
-                        Text("Take photo")
-                    }
+    ) {
+        Button(onClick = {
+            if (!isCameraPermissionGranted) {
+                launcher.launch(Manifest.permission.CAMERA)
+            } else {
+                navController.navigate(Routes.TakePhotoScreen.route)
+            }
 
 
-                }
-    if(showPermissionDenied){
-        PermissionDeclinedScreen()
+        }) {
+            Text("Take photo")
         }
+
+
+    }
+    if (showPermissionDenied) {
+        PermissionDeclinedScreen()
+    }
 }
 
 @Composable
@@ -175,12 +174,11 @@ fun PermissionDeclinedScreen() {
         }
 
 
-
     }
 }
 
 
-fun openAppSettings(activity: Activity){
+fun openAppSettings(activity: Activity) {
     val intent = Intent().apply {
         action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
         data = Uri.fromParts("package", activity.packageName, null)
