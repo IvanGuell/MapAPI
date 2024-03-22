@@ -1,5 +1,6 @@
 package com.example.mapapp.viewmodel
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +44,8 @@ class MapViewModel : ViewModel() {
     private val _showPermissionDenied = MutableLiveData(false)
     val showPermissionDenied = _showPermissionDenied
 
+    private val _photoSaved = MutableLiveData<Bitmap>()
+    val photoSaved = _photoSaved
     fun setCameraPermissionGranted(granted: Boolean) {
         _cameraPermissionGranted.value = granted
     }

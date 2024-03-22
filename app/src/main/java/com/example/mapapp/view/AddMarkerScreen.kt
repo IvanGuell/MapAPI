@@ -51,6 +51,31 @@ fun AddMarkerScreen(
     var snippet by remember { mutableStateOf("") }
 
     Surface(color = Color(0xFFFFFFFF)) {
+        val context = LocalContext.current
+        val isCameraPermissionGranted by mapViewModel.cameraPermissionGranted.observeAsState(false)
+        val shouldPermissionRationale by mapViewModel.shouldShowPermissionRationale.observeAsState(false)
+        val showPermissionDenied by mapViewModel.showPermissionDenied.observeAsState(false)
+
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                if (isGranted) {
+                    mapViewModel.setCameraPermissionGranted(true)
+                } else {
+                    mapViewModel.setShouldShowPermissionRationale(
+                        ActivityCompat.shouldShowRequestPermissionRationale(
+                            context as Activity,
+                            Manifest.permission.CAMERA
+                        )
+
+                    )
+                    if (!shouldPermissionRationale) {
+                        Log.i("CameraScreen", "No podemos volver a pedi permisos")
+                        mapViewModel.setShowPermissionDenied(true)
+                    }
+                }
+            }
+        )
         Column(
             modifier = Modifier
                 .padding(16.dp),
@@ -90,11 +115,19 @@ fun AddMarkerScreen(
             }
             Button(
                 onClick = {
-                    navController.navigate(Routes.TakePhotoScreen.route)
+                    if (!isCameraPermissionGranted) {
+                        launcher.launch(Manifest.permission.CAMERA)
+                    } else {
+                        navController.navigate(Routes.TakePhotoScreen.route)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
+
             ) {
+                if (showPermissionDenied) {
+                    PermissionDeclinedScreen()
+                }
                 Text("Camera")
             }
         }
@@ -102,59 +135,7 @@ fun AddMarkerScreen(
 }
 
 
-@Composable
-fun CameraScreen(navController: NavController, mapViewModel: MapViewModel) {
-    val context = LocalContext.current
-    val isCameraPermissionGranted by mapViewModel.cameraPermissionGranted.observeAsState(false)
-    val shouldPermissionRationale by mapViewModel.shouldShowPermissionRationale.observeAsState(false)
-    val showPermissionDenied by mapViewModel.showPermissionDenied.observeAsState(false)
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-
-                mapViewModel.setCameraPermissionGranted(true)
-            } else {
-                mapViewModel.setShouldShowPermissionRationale(
-                    ActivityCompat.shouldShowRequestPermissionRationale(
-                        context as Activity,
-                        Manifest.permission.CAMERA
-                    )
-
-                )
-                if (!shouldPermissionRationale) {
-                    Log.i("CameraScreen", "No podemos volver a pedi permisos")
-                    mapViewModel.setShowPermissionDenied(true)
-                }
-            }
-        }
-    )
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-
-    ) {
-        Button(onClick = {
-            if (!isCameraPermissionGranted) {
-                launcher.launch(Manifest.permission.CAMERA)
-            } else {
-                navController.navigate(Routes.TakePhotoScreen.route)
-            }
-
-
-        }) {
-            Text("Take photo")
-        }
-
-
-    }
-    if (showPermissionDenied) {
-        PermissionDeclinedScreen()
-    }
-}
 
 @Composable
 fun PermissionDeclinedScreen() {

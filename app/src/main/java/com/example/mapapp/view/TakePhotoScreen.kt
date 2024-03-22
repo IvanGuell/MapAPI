@@ -80,6 +80,7 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
             IconButton(
                 onClick = {
                     takePhoto(context, controller) { photo ->
+                        mapViewModel.photoSaved
 
                     }
                 }
@@ -134,7 +135,7 @@ private fun takePhoto(
             override fun onError(exception: ImageCaptureException) {
                 super.onError(exception)
                 Log.e("Camera", "Error taking photo", exception)
-            }
+        }
         }
     )
 

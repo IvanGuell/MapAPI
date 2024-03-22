@@ -69,7 +69,9 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit){
                 permissionState.launchPermissionRequest()
             }
-            if (permissionState.status.isGranted){}
+            if (permissionState.status.isGranted){
+                MapScreen(navigationController, mapViewModel)
+            }
             else{ Text(text = "Need permision")}
 
 
