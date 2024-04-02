@@ -2,7 +2,12 @@ package com.example.mapapp.view
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -25,7 +30,10 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +43,9 @@ import com.example.mapapp.viewmodel.MapViewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.example.mapapp.R
+import com.example.mapapp.navigate.Routes
 
 @Composable
 fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
@@ -44,6 +55,24 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
             CameraController.IMAGE_CAPTURE
         }
     }
+    val img: Bitmap? = ContextCompat.getDrawable(context, R.drawable.empty_image)?.toBitmap()
+    var bitmap by remember { mutableStateOf(img) }
+    val launchImage = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            bitmap = if (Build.VERSION.SDK_INT < 28){
+                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            }else {
+                val source = it?.let {itl ->
+                    ImageDecoder.createSource(context.contentResolver, itl)
+
+                }
+                source?.let { itl ->
+                    ImageDecoder.decodeBitmap(itl)
+                }!!
+            }
+
+        })
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(controller = controller, modifier = Modifier.fillMaxSize())
         IconButton(
@@ -71,7 +100,9 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(
-                onClick = {}
+                onClick = {
+                    launchImage.launch("image/*")
+                }
 
             ) {
                 Icon(imageVector = Icons.Default.Photo, contentDescription = "Open Gallery")

@@ -44,6 +44,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.Routes
+import com.example.mapapp.view.GalleryScreen
 import com.example.mapapp.view.List
 import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.PositionMarker
@@ -91,6 +92,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.TakePhotoScreen.route) {
                     TakePhotoScreen(navigationController, mapViewModel)
+                }
+                composable(Routes.GalleryScreen.route) {
+                    GalleryScreen(navigationController, mapViewModel)
                 }
 
             }
