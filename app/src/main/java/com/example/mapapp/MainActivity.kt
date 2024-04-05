@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,7 +48,7 @@ import com.example.mapapp.navigate.Routes
 import com.example.mapapp.view.GalleryScreen
 import com.example.mapapp.view.List
 import com.example.mapapp.view.MapScreen
-import com.example.mapapp.view.PositionMarker
+import com.example.mapapp.view.DetailScreen
 import com.example.mapapp.view.TakePhotoScreen
 import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -60,10 +61,9 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val mapViewModel by viewModels<MapViewModel>()
         setContent {
             val navigationController = rememberNavController()
-            val mapViewModel by viewModels<MapViewModel>()
-
 
             val permissionState =
                 rememberPermissionState(permission = android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -71,33 +71,9 @@ class MainActivity : ComponentActivity() {
                 permissionState.launchPermissionRequest()
             }
             if (permissionState.status.isGranted){
-                MapScreen(navigationController, mapViewModel)
+                MyDrawer(navigationController, mapViewModel)
             }
             else{ Text(text = "Need permision")}
-
-
-
-            NavHost(
-                navController = navigationController,
-                startDestination = Routes.MapScreen.route
-            ) {
-                composable(Routes.MapScreen.route) {
-                    MapScreen(navigationController, mapViewModel)
-                }
-                composable(Routes.List.route) {
-                    List(navigationController, mapViewModel)
-                }
-                composable(Routes.PositionMarker.route) {
-                    PositionMarker(navigationController, mapViewModel)
-                }
-                composable(Routes.TakePhotoScreen.route) {
-                    TakePhotoScreen(navigationController, mapViewModel)
-                }
-                composable(Routes.GalleryScreen.route) {
-                    GalleryScreen(navigationController, mapViewModel)
-                }
-
-            }
         }
     }
 }
@@ -105,14 +81,13 @@ class MainActivity : ComponentActivity() {
 val screensFromDrawer = listOf(
     Routes.MapScreen,
     Routes.List,
-    Routes.PositionMarker
+    Routes.DetailScreen
 )
 
 @Composable
 fun MyDrawer(
     navController: NavController,
-    mapViewModel: MapViewModel,
-    content: @Composable () -> Unit
+    mapViewModel: MapViewModel
 ) {
     val scope = rememberCoroutineScope()
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -161,8 +136,7 @@ fun MyDrawer(
         MyScaffold(
             mapViewModel,
             state,
-            navController,
-            content
+            navController
         )
     }
 }
@@ -172,8 +146,7 @@ fun MyDrawer(
 fun MyScaffold(
     mapViewModel: MapViewModel,
     state: DrawerState,
-    navController: NavController,
-    content: @Composable () -> Unit
+    navController: NavController
 ) {
     Scaffold(
         topBar = { MyTopAppBar(mapViewModel, state) },
@@ -183,7 +156,29 @@ fun MyScaffold(
                 .fillMaxSize()
                 .background(Color(0xffFF914D))
         ) {
-            Box(Modifier.padding(it)) { content() }
+            Box(Modifier.padding(it)) {
+                NavHost(
+                    navController = navController as NavHostController,
+                    startDestination = Routes.MapScreen.route
+                ) {
+                    composable(Routes.MapScreen.route) {
+                        MapScreen(navController, mapViewModel)
+                    }
+                    composable(Routes.List.route) {
+                        List(navController, mapViewModel)
+                    }
+                    composable(Routes.DetailScreen.route) {
+                        DetailScreen(navController, mapViewModel)
+                    }
+                    composable(Routes.TakePhotoScreen.route) {
+                        TakePhotoScreen(navController, mapViewModel)
+                    }
+                    composable(Routes.GalleryScreen.route) {
+                        GalleryScreen(navController, mapViewModel)
+                    }
+
+                }
+            }
         }
     }
 }

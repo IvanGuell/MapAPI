@@ -39,14 +39,34 @@ import javax.xml.transform.Source
 
 @Composable
 fun GalleryScreen(navController: NavController, mapViewModel: MapViewModel) {
+    val context = LocalContext.current
 
+    val img: Bitmap? = ContextCompat.getDrawable(context, R.drawable.empty_image)?.toBitmap()
+    var bitmap by remember { mutableStateOf(img) }
+    val launchImage = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            bitmap = if (Build.VERSION.SDK_INT < 28){
+                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            }else {
+                val source = it?.let {itl ->
+                    ImageDecoder.createSource(context.contentResolver, itl)
+
+                }
+                source?.let { itl ->
+                    ImageDecoder.decodeBitmap(itl)
+                }!!
+            }
+
+        })
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
-
     ) {
         Button(onClick = {
+            launchImage.launch("image/*")
+
         }) {
             Text("Open Gallery")
         }

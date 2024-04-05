@@ -55,26 +55,21 @@ fun List(navController: NavController, mapViewModel: MapViewModel) {
             .fillMaxSize()
             .background(Color(0xffFF914D))
     ) {
-        MyDrawer(
-            navController = navController,
-            mapViewModel = mapViewModel
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
+            MySearchBar(navController,mapViewModel)
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyColumn(
+                state = lazyColumnState
             ) {
-                MySearchBar(navController,mapViewModel)
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(
-                    state = lazyColumnState
-                ) {
-                    items(marcadores) { marker ->
-                        if (marker.title.contains(searchTextState.value.text, ignoreCase = true)) {
-                            item(
-                                marker,
-                                navController,
-                                mapViewModel
-                            )
-                        }
+                items(marcadores) { marker ->
+                    if (marker.title.contains(searchTextState.value.text, ignoreCase = true)) {
+                        item(
+                            marker,
+                            navController,
+                            mapViewModel
+                        )
                     }
                 }
             }

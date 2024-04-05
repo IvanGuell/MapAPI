@@ -32,7 +32,7 @@ sealed class Screens(
 
                 object PositionMarker : DrawerScreens
                         (
-                        Routes.PositionMarker.route,
+                        Routes.DetailScreen.route,
                         Icons.Filled.FavoriteBorder,
                         "Add flurry point"
                 )

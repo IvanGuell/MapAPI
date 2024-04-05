@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import com.example.mapapp.viewmodel.MapViewModel
 
 @Composable
-fun PositionMarker(
+fun DetailScreen(
     navigationController: NavHostController,
     mapViewModel: MapViewModel
 ){

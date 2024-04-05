@@ -9,28 +9,6 @@ import com.google.android.gms.maps.model.LatLng
 class MapViewModel : ViewModel() {
 
     private var position = LatLng(41.4534265, 2.1837151)
-    fun changePosition(positionNueva: LatLng) {
-        position = positionNueva
-    }
-
-    fun getPosition(): LatLng {
-        return position
-    }
-
-    private val _markers = MutableLiveData<List<Marker>>()
-    val markers: LiveData<List<Marker>> = _markers
-
-    fun addMarker(marker: Marker) {
-        val currentList = _markers.value.orEmpty().toMutableList()
-        currentList.add(marker)
-        _markers.value = currentList
-    }
-
-    fun removeMarker(marker: Marker) {
-        val currentList = _markers.value.orEmpty().toMutableList()
-        currentList.remove(marker)
-        _markers.value = currentList
-    }
 
     private val _searchedMarkers = MutableLiveData<List<Marker>>()
     val searchedMarkers: LiveData<List<Marker>> = _searchedMarkers
@@ -43,6 +21,9 @@ class MapViewModel : ViewModel() {
 
     private val _showPermissionDenied = MutableLiveData(false)
     val showPermissionDenied = _showPermissionDenied
+
+    private var _showBottomSheet = MutableLiveData(false)
+    val showBottomSheet = _showBottomSheet
 
     private val _photoSaved = MutableLiveData<Bitmap>()
     val photoSaved = _photoSaved
@@ -66,9 +47,43 @@ class MapViewModel : ViewModel() {
             _searchedMarkers.value = allMarkers
         }
     }
+
+    fun setShowState(show: Boolean){
+        _showBottomSheet.value = show
+
+    }
+
+    fun changePosition(positionNueva: LatLng) {
+        position = positionNueva
+    }
+
+    fun getPosition(): LatLng {
+        return position
+    }
+
+    private val _markers = MutableLiveData<List<Marker>>()
+    val markers: LiveData<List<Marker>> = _markers
+
+    fun addMarker(marker: Marker) {
+        val currentList = _markers.value.orEmpty().toMutableList()
+        currentList.add(marker)
+        _markers.value = currentList
+    }
+
+    fun removeMarker(marker: Marker) {
+        val currentList = _markers.value.orEmpty().toMutableList()
+        currentList.remove(marker)
+        _markers.value = currentList
+    }
+
 }
+
+
+
 
 data class Marker(
     val position: LatLng,
     val title: String,
-    val snippet: String)
+    val snippet: String,
+    val photo: Bitmap? = null
+)

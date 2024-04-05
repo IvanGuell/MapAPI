@@ -3,6 +3,7 @@ package com.example.mapapp.view
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
@@ -15,6 +16,9 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +26,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -36,6 +42,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -46,6 +56,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.mapapp.R
 import com.example.mapapp.navigate.Routes
+import java.io.IOException
 
 @Composable
 fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
@@ -55,24 +66,28 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
             CameraController.IMAGE_CAPTURE
         }
     }
+
     val img: Bitmap? = ContextCompat.getDrawable(context, R.drawable.empty_image)?.toBitmap()
     var bitmap by remember { mutableStateOf(img) }
+
     val launchImage = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            bitmap = if (Build.VERSION.SDK_INT < 28){
-                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-            }else {
-                val source = it?.let {itl ->
-                    ImageDecoder.createSource(context.contentResolver, itl)
-
+        onResult = { uri: Uri? ->
+            uri?.let { selectedImageUri ->
+                try {
+                    val bitmapFromUri = if (Build.VERSION.SDK_INT < 28) {
+                        MediaStore.Images.Media.getBitmap(context.contentResolver, selectedImageUri)
+                    } else {
+                        val source = ImageDecoder.createSource(context.contentResolver, selectedImageUri)
+                        ImageDecoder.decodeBitmap(source)
+                    }
+                    bitmap = bitmapFromUri
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
-                source?.let { itl ->
-                    ImageDecoder.decodeBitmap(itl)
-                }!!
             }
-
         })
+
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(controller = controller, modifier = Modifier.fillMaxSize())
         IconButton(
@@ -90,6 +105,7 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
 
         }
     }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -101,7 +117,7 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
         ) {
             IconButton(
                 onClick = {
-                    launchImage.launch("image/*")
+                    navController.navigate(Routes.GalleryScreen.route)
                 }
 
             ) {
@@ -112,20 +128,20 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
                 onClick = {
                     takePhoto(context, controller) { photo ->
                         mapViewModel.photoSaved
+                        bitmap = photo
 
                     }
-                }
 
+                }
             ) {
                 Icon(imageVector = Icons.Default.PhotoCamera, contentDescription = "Take Photo")
-
             }
+
         }
 
     }
-
-
 }
+
 
 
 @Composable

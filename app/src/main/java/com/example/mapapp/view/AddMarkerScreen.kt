@@ -4,6 +4,7 @@ package com.example.mapapp.view
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
@@ -49,6 +50,7 @@ fun AddMarkerScreen(
 ) {
     var title by remember { mutableStateOf("") }
     var snippet by remember { mutableStateOf("") }
+    var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     Surface(color = Color(0xFFFFFFFF)) {
         val context = LocalContext.current
@@ -104,7 +106,7 @@ fun AddMarkerScreen(
             Button(
                 onClick = {
                     val latLng = mapViewModel.getPosition()
-                    val markerToAdd = Marker(latLng, title, snippet)
+                    val markerToAdd = Marker(latLng, title, snippet, photoBitmap)
                     mapViewModel.addMarker(markerToAdd)
                     onCloseBottomSheet()
                 },
