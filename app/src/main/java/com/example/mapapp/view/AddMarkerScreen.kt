@@ -72,7 +72,7 @@ fun AddMarkerScreen(
 
                     )
                     if (!shouldPermissionRationale) {
-                        Log.i("CameraScreen", "No podemos volver a pedi permisos")
+                        Log.i("CameraScreen", "No podemos volver a pedir permisos")
                         mapViewModel.setShowPermissionDenied(true)
                     }
                 }
