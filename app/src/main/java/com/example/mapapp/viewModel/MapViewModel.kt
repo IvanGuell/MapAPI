@@ -27,6 +27,13 @@ class MapViewModel : ViewModel() {
 
     private val _photoSaved = MutableLiveData<Bitmap>()
     val photoSaved = _photoSaved
+
+    private val _photoTaken = MutableLiveData<Bitmap?>()
+    val photoTaken: LiveData<Bitmap?> = _photoTaken
+
+    fun setPhotoTaken(photo: Bitmap?) {
+        _photoTaken.value = photo
+    }
     fun setCameraPermissionGranted(granted: Boolean) {
         _cameraPermissionGranted.value = granted
     }

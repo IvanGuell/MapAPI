@@ -106,6 +106,7 @@ fun AddMarkerScreen(
             Button(
                 onClick = {
                     val latLng = mapViewModel.getPosition()
+                    val photoBitmap = mapViewModel.photoTaken.value
                     val markerToAdd = Marker(latLng, title, snippet, photoBitmap)
                     mapViewModel.addMarker(markerToAdd)
                     onCloseBottomSheet()

@@ -55,7 +55,7 @@ fun GalleryScreen(navController: NavController, mapViewModel: MapViewModel) {
                 }
                 source?.let { itl ->
                     ImageDecoder.decodeBitmap(itl)
-                }!!
+                }
             }
 
         })
