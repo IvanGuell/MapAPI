@@ -26,7 +26,7 @@ fun EditScreen(
 ){
     val title = navController.currentBackStackEntry?.arguments?.getString("title")
     val marker = mapViewModel.markers.value?.find { it.title == title }
-    var navigationControl by mapViewModel.navigationControl.observeAsState(false)
+    val navigationControl by mapViewModel.navigationControl.observeAsState(false)
 
     var newTitle by remember { mutableStateOf(marker?.title ?: "") }
     var newSnippet by remember { mutableStateOf(marker?.snippet ?: "") }
@@ -47,7 +47,6 @@ fun EditScreen(
             label = { Text("Descripción") }
         )
         Button(onClick = {
-            navigationControl = true
 
             navController.navigate(Routes.TakePhotoScreen.route)
 
