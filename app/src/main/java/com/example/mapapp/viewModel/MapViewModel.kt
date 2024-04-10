@@ -31,6 +31,20 @@ class MapViewModel : ViewModel() {
     private val _photoTaken = MutableLiveData<Bitmap?>()
     val photoTaken: LiveData<Bitmap?> = _photoTaken
 
+    private val _isMarkerSaved = MutableLiveData(false)
+    val isMarkerSaved: LiveData<Boolean> = _isMarkerSaved
+
+    private val _navigationControl = MutableLiveData(false)
+    val  navigationControl = _navigationControl
+
+    fun saveMarker() {
+        _isMarkerSaved.value = true
+    }
+
+    fun resetMarkerSaved() {
+        _isMarkerSaved.value = false
+    }
+
     fun setPhotoTaken(photo: Bitmap?) {
         _photoTaken.value = photo
     }

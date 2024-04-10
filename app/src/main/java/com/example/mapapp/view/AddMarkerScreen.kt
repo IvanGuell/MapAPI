@@ -51,6 +51,8 @@ fun AddMarkerScreen(
     var title by remember { mutableStateOf("") }
     var snippet by remember { mutableStateOf("") }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    val isMarkerSaved by mapViewModel.isMarkerSaved.observeAsState(false)
+
 
     Surface(color = Color(0xFFFFFFFF)) {
         val context = LocalContext.current
@@ -63,6 +65,7 @@ fun AddMarkerScreen(
             onResult = { isGranted ->
                 if (isGranted) {
                     mapViewModel.setCameraPermissionGranted(true)
+                    navController.navigate(Routes.TakePhotoScreen.route)
                 } else {
                     mapViewModel.setShouldShowPermissionRationale(
                         ActivityCompat.shouldShowRequestPermissionRationale(
@@ -105,11 +108,12 @@ fun AddMarkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
+
                     val latLng = mapViewModel.getPosition()
                     val photoBitmap = mapViewModel.photoTaken.value
                     val markerToAdd = Marker(latLng, title, snippet, photoBitmap)
                     mapViewModel.addMarker(markerToAdd)
-                    onCloseBottomSheet()
+                    navController.navigate(Routes.MapScreen.route)
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
@@ -126,7 +130,6 @@ fun AddMarkerScreen(
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
-
             ) {
                 if (showPermissionDenied) {
                     PermissionDeclinedScreen()

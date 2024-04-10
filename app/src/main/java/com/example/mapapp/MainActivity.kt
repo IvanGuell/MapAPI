@@ -50,6 +50,7 @@ import com.example.mapapp.view.GalleryScreen
 import com.example.mapapp.view.List
 import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.DetailScreen
+import com.example.mapapp.view.EditScreen
 import com.example.mapapp.view.TakePhotoScreen
 import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -149,6 +150,8 @@ fun MyScaffold(
     state: DrawerState,
     navController: NavController
 ) {
+
+
     Scaffold(
         topBar = { MyTopAppBar(mapViewModel, state) },
     ) {
@@ -177,11 +180,18 @@ fun MyScaffold(
                     composable(Routes.GalleryScreen.route) {
                         GalleryScreen(navController, mapViewModel)
                     }
+                    composable(Routes.EditScreen.route) {
+                        EditScreen(navController, mapViewModel)
+                    }
                     composable(Routes.AddMarkerScreen.route) {
                         AddMarkerScreen(
                             navController = navController,
                             mapViewModel = mapViewModel,
-                            onCloseBottomSheet = {  }
+                            onCloseBottomSheet = {
+
+
+
+                            }
                         )
                     }
                 }
