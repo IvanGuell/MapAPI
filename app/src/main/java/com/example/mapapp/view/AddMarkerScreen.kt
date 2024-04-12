@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -62,6 +63,8 @@ fun AddMarkerScreen(
         val isCameraPermissionGranted by mapViewModel.cameraPermissionGranted.observeAsState(false)
         val shouldPermissionRationale by mapViewModel.shouldShowPermissionRationale.observeAsState(false)
         val showPermissionDenied by mapViewModel.showPermissionDenied.observeAsState(false)
+        val title by mapViewModel.titleText.observeAsState("")
+        val snippet by mapViewModel.snippetText.observeAsState("")
 
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission(),
@@ -93,7 +96,7 @@ fun AddMarkerScreen(
             TextField(
                 value = title,
                 onValueChange = {
-                    title = it
+                    mapViewModel.setTitleText(it)
                 },
                 label = { Text("nombre del lugar") },
                 modifier = Modifier
@@ -103,7 +106,7 @@ fun AddMarkerScreen(
             TextField(
                 value = snippet,
                 onValueChange = {
-                    snippet = it
+                    mapViewModel.setSnippetText(it)
                 },
                 label = { Text("breve descripción") },
                 modifier = Modifier.fillMaxWidth()
@@ -125,6 +128,17 @@ fun AddMarkerScreen(
             }
             Button(
                 onClick = {
+                    mapViewModel.resetInputFields()
+                    mapViewModel.setShowState(false)
+                },
+                colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
+                modifier = Modifier.width(150.dp)
+            ){
+                Text("Cancelar")
+
+            }
+            Button(
+                onClick = {
                     if (!isCameraPermissionGranted) {
                         launcher.launch(Manifest.permission.CAMERA)
                     } else {
@@ -139,21 +153,19 @@ fun AddMarkerScreen(
                 }
                 Text("Camera")
             }
-            // Observa el estado de la foto tomada en tu ViewModel
             val photoTaken by mapViewModel.photoTaken.observeAsState()
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.LightGray))
-            {
-                // ...
-                // Muestra la foto tomada en tu UI
+
                 photoTaken?.let { photo ->
-                    Image(bitmap = photo.asImageBitmap(), contentDescription = "Taken photo")
+                    Image(
+                        bitmap = photo.asImageBitmap(),
+                        contentDescription = "Taken photo",
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
                 }
                 // ...
-            }
+
         }
     }
 }

@@ -36,7 +36,25 @@ class MapViewModel : ViewModel() {
 
     private val _navigationControl = MutableLiveData(false)
     val  navigationControl = _navigationControl
+    private val _titleText = MutableLiveData<String>("")
+    val titleText: LiveData<String> = _titleText
 
+    private val _snippetText = MutableLiveData<String>("")
+    val snippetText: LiveData<String> = _snippetText
+
+    fun setTitleText(text: String) {
+        _titleText.value = text
+    }
+
+    fun setSnippetText(text: String) {
+        _snippetText.value = text
+    }
+
+    fun resetInputFields() {
+        _titleText.value = ""
+        _snippetText.value = ""
+        _photoTaken.value = null
+    }
     fun saveMarker() {
         _isMarkerSaved.value = true
     }

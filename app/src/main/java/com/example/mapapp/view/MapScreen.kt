@@ -83,6 +83,8 @@ fun MapScreen(
                     AddMarkerScreen(
                         mapViewModel = mapViewModel,
                         onCloseBottomSheet = {
+                            mapViewModel.resetInputFields()
+
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
                                     mapViewModel.setShowState(false)
