@@ -175,7 +175,7 @@ fun MyScaffold(
                         DetailScreen(navController, mapViewModel)
                     }
                     composable(Routes.TakePhotoScreen.route) {
-                        TakePhotoScreen(navController, mapViewModel)
+                        TakePhotoScreen(navController, mapViewModel,onCloseBottomSheet = {})
                     }
                     composable(Routes.GalleryScreen.route) {
                         GalleryScreen(navController, mapViewModel)

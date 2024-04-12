@@ -10,6 +10,8 @@ import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,7 +55,7 @@ fun AddMarkerScreen(
     var snippet by remember { mutableStateOf("") }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
     val isMarkerSaved by mapViewModel.isMarkerSaved.observeAsState(false)
-
+    val photoTaken by mapViewModel.photoTaken.observeAsState()
 
     Surface(color = Color(0xFFFFFFFF)) {
         val context = LocalContext.current
@@ -135,6 +138,21 @@ fun AddMarkerScreen(
                     PermissionDeclinedScreen()
                 }
                 Text("Camera")
+            }
+            // Observa el estado de la foto tomada en tu ViewModel
+            val photoTaken by mapViewModel.photoTaken.observeAsState()
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray))
+            {
+                // ...
+                // Muestra la foto tomada en tu UI
+                photoTaken?.let { photo ->
+                    Image(bitmap = photo.asImageBitmap(), contentDescription = "Taken photo")
+                }
+                // ...
             }
         }
     }

@@ -60,7 +60,7 @@ import com.example.mapapp.navigate.Routes
 import java.io.IOException
 
 @Composable
-fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
+fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, onCloseBottomSheet: () -> Unit ) {
     val context = LocalContext.current
     val controller = remember {
         LifecycleCameraController(context).apply {
@@ -127,9 +127,10 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel) {
             }
             IconButton(
                 onClick = {
-                    takePhoto(context, controller) { photo ->
+                    takePhoto(context, mapViewModel, controller) { photo ->
                         mapViewModel.setPhotoTaken(photo)
-                        navController.navigate(Routes.AddMarkerScreen.route)
+                        navController.popBackStack()
+                        mapViewModel.setShowState(true)
                     }
                 }
             ) {
@@ -167,6 +168,7 @@ fun CameraPreview(
 
 private fun takePhoto(
     context: Context,
+    mapViewModel: MapViewModel,
     controller: LifecycleCameraController,
     onPhotoTaken: (Bitmap) -> Unit
 ) {
@@ -188,6 +190,7 @@ private fun takePhoto(
                     true
                 )
                 onPhotoTaken(rotatedBitmap)
+                mapViewModel.setShowState(true)
             }
 
             override fun onError(exception: ImageCaptureException) {

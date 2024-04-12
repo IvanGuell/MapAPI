@@ -41,7 +41,7 @@ fun MapScreen(
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val showBottomSheet by mapViewModel.showBottomSheet.observeAsState(false)
     val context = LocalContext.current
     val fusedLocationProviderClient =
         remember { LocationServices.getFusedLocationProviderClient(context) }
@@ -70,14 +70,13 @@ fun MapScreen(
             properties = MapProperties(isMyLocationEnabled = true),
             onMapLongClick = {
                 mapViewModel.changePosition(it)
-                showBottomSheet = true
+                mapViewModel.setShowState(true)
             }
         ) {
             if (showBottomSheet) {
                 ModalBottomSheet(
                     onDismissRequest = {
-                        showBottomSheet = false
-                    },
+                        mapViewModel.setShowState(false)                    },
                     sheetState = sheetState
                 ) {
 
@@ -86,7 +85,7 @@ fun MapScreen(
                         onCloseBottomSheet = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
-                                    showBottomSheet = false
+                                    mapViewModel.setShowState(false)
                                 }
                             }
                         },
