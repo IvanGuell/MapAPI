@@ -1,12 +1,21 @@
 package com.example.mapapp.viewmodel
 
+import MapMarkers
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mapapp.firebase.Repository
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MapViewModel : ViewModel() {
+
+    private val database = FirebaseFirestore.getInstance()
+
 
     private var position = LatLng(41.4534265, 2.1837151)
 
@@ -35,12 +44,51 @@ class MapViewModel : ViewModel() {
     val isMarkerSaved: LiveData<Boolean> = _isMarkerSaved
 
     private val _navigationControl = MutableLiveData(false)
-    val  navigationControl = _navigationControl
+    val navigationControl = _navigationControl
     private val _titleText = MutableLiveData<String>("")
     val titleText: LiveData<String> = _titleText
 
     private val _snippetText = MutableLiveData<String>("")
     val snippetText: LiveData<String> = _snippetText
+
+
+    fun getUsers() {
+        Repository.getUsers().addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.e("Firestore Error", error.message.toString())
+                return@addSnapshotListener
+            }
+            val tempList = mutableListOf<MapMarkers>()
+            for (dc: DocumentChange in value?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    val newUser = dc.document.toObject(MapMarkers::class.java)
+                    newUser.uid = dc.document.id
+                    tempList.add(newUser)
+                }
+            }
+            _userList.value = tempList
+        }
+    }
+
+    fun getUser(userId: String){
+        Repository.getUser(userId).addSnapShotListener { value, error ->
+            if (error != null) {
+                Log.w("UserRepository", "Listen failed.", error)
+                return@addSnapshotListener
+            }
+            if (value != null && value.exists()) {
+                val user = value.toObject(User::class.java)
+                if (user != null) {
+                    _user.userId = userId
+                }
+                _actualUser.value = user
+                _userName.value = _actualUser.value!!.age.toString()
+            } else {
+                Log.d("UserRepository", "Current data: null")
+            }
+        }
+    }
+
 
     fun setTitleText(text: String) {
         _titleText.value = text
