@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "895050562744",
+    "project_id": "mapprojectfirebase-a994c",
+    "storage_bucket": "mapprojectfirebase-a994c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895050562744:android:6c9da35e3cc175017c484d",
+        "android_client_info": {
+          "package_name": "com.example.mapapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb90YrJuHIAcypc9X6l4MdCFukyGSHVsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

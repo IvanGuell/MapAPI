@@ -1,4 +1,5 @@
 data class MapMarkers(
+        var mid: String,
         var uid: String,
         var lat: Double,
         var lng: Double,
@@ -6,5 +7,8 @@ data class MapMarkers(
         var snippet: String,
         var photo: String?
 
-        constructor() : this()
-)
+){
+        constructor(): this("", "", 0.0, 0.0, "", "", null)
+
+
+}

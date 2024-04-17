@@ -72,8 +72,10 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, on
     var bitmap by remember { mutableStateOf(img) }
 
     val launchImage = rememberLauncherForActivityResult(
+
         contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
+        onResult = {
+            uri: Uri? ->
             uri?.let { selectedImageUri ->
                 try {
                     val bitmapFromUri = if (Build.VERSION.SDK_INT < 28) {

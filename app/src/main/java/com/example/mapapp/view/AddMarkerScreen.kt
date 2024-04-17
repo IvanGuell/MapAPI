@@ -114,6 +114,8 @@ fun AddMarkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
+                    if (uri != null) mapViewModel.uploadImage(uri)
+
                     mapViewModel.setShowState(false)
 
                     val latLng = mapViewModel.getPosition()

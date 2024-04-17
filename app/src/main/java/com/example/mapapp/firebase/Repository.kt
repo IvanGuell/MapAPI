@@ -1,47 +1,56 @@
 package com.example.mapapp.firebase
 
+import MapMarkers
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 
 class Repository {
 
-    fun addUser(user: User) {
-        database.collection("users")
-            .add(
-                hasMapOf(
-                    "userName" to user.UserName,
-                    "age" to user.age,
-                    "profilePicture" to user.picture
-                )
+    private val database = FirebaseFirestore.getInstance()
 
+    fun addMarker(marker: MapMarkers) {
+        database.collection("markers")
+            .add(
+                hashMapOf(
+                    "mid" to marker.mid,
+                    "uid" to marker.uid,
+                    "lat" to marker.lat,
+                    "lng" to marker.lng,
+                    "title" to marker.title,
+                    "snippet" to marker.snippet,
+                    "photo" to marker.photo
+                )
             )
     }
-    fun editUser(editUser: User){
-            database.collection("users")
-            .document(editUser.id)
+    fun editMarker(editMarker: MapMarkers){
+        database.collection("markers")
+            .document(editMarker.uid)
             .set(
                 hashMapOf(
-                    "userName" to editUser.UserName,
-                    "age" to editUser.age,
-                    "profilePicture" to editUser.picture
+                    "uid" to editMarker.uid,
+                    "lat" to editMarker.lat,
+                    "lng" to editMarker.lng,
+                    "title" to editMarker.title,
+                    "snippet" to editMarker.snippet,
+                    "photo" to editMarker.photo
                 )
             )
-
     }
 
-
-    fun deleteUser(userId: String){
-        database.collection("users")
-            .document(userId)
+    fun deleteMarker(markerId: String){
+        database.collection("markers")
+            .document(markerId)
             .delete()
     }
 
-    fun getUsers(): CollectionReference {
-        return database.collection("users")
+    fun getMarkers(): CollectionReference {
+        return database.collection("markers")
     }
 
-    fun getUser(userId: String): DocumentReference {
-        return database.collection("users")
-            .document(userId)
+    fun getMarker(markerId: String): DocumentReference {
+        return database.collection("markers")
+            .document(markerId)
     }
-
 }
+

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.gms.google-services")
 
 }
 
@@ -61,9 +62,12 @@ dependencies {
 //Icons
     implementation("androidx.compose.material:material-icons-extended:1.6.3")
     implementation("com.google.accompanist:accompanist-permissions:0.28.0")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
 
     implementation("com.google.firebase:firebase-firestore-ktx")
-
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation ("com.google.firebase:firebase-storage-ktx")
 
     implementation ("androidx.compose.material3:material3:1.2.0-alpha02")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.2")
@@ -87,9 +91,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation ("com.google.firebase:firebase-storage-ktx")
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+
     implementation ("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
