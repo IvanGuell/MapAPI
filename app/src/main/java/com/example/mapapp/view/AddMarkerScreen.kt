@@ -46,6 +46,7 @@ import com.example.mapapp.viewmodel.MapViewModel
 import com.example.mapapp.viewmodel.Marker
 
 
+
 @Composable
 fun AddMarkerScreen(
     navController: NavController,
@@ -114,7 +115,6 @@ fun AddMarkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    if (uri != null) mapViewModel.uploadImage(uri)
 
                     mapViewModel.setShowState(false)
 
@@ -157,23 +157,17 @@ fun AddMarkerScreen(
                 }
                 Text("Camera")
             }
-            val photoTaken by mapViewModel.photoTaken.observeAsState()
-
-
-                photoTaken?.let { photo ->
-                    Image(
-                        bitmap = photo.asImageBitmap(),
-                        contentDescription = "Taken photo",
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
-                }
-                // ...
-
+            photoTaken?.let { photo ->
+                Image(
+                    bitmap = photo.asImageBitmap(),
+                    contentDescription = "Taken photo",
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
         }
     }
 }
-
 
 
 

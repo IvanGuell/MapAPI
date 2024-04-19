@@ -2,6 +2,7 @@ package com.example.mapapp.viewmodel
 
 import MapMarkers
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,10 @@ import com.example.mapapp.firebase.Repository
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class MapViewModel : ViewModel() {
@@ -96,6 +101,20 @@ class MapViewModel : ViewModel() {
         }
     }
 
+
+    fun uploadImage(imageUri: Uri) {
+        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
+        val now = Date()
+        val fileName = formatter.format(now)
+        val storage = FirebaseStorage.getInstance().getReference("images/$fileName")
+        storage.putFile(imageUri)
+            .addOnSuccessListener {
+                Log.d("Upload", "Image uploaded")
+            }
+            .addOnFailureListener {
+                Log.e("Upload", "Error uploading image")
+            }
+    }
 
     fun setTitleText(text: String) {
         _titleText.value = text

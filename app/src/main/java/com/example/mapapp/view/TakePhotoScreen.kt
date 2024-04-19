@@ -17,9 +17,6 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,13 +24,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cameraswitch
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.Composable
@@ -43,10 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -57,7 +47,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.mapapp.R
 import com.example.mapapp.navigate.Routes
+import com.google.firebase.storage.FirebaseStorage
 import java.io.IOException
+import java.text.SimpleDateFormat
 
 @Composable
 fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, onCloseBottomSheet: () -> Unit ) {
@@ -85,6 +77,7 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, on
                         ImageDecoder.decodeBitmap(source)
                     }
                     bitmap = bitmapFromUri
+                    if (uri != null) mapViewModel.uploadImage(uri)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -203,3 +196,5 @@ private fun takePhoto(
     )
 
 }
+
+
