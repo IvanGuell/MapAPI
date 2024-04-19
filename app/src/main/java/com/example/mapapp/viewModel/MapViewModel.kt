@@ -65,6 +65,12 @@ class MapViewModel : ViewModel() {
 
     private val repository = Repository()
 
+    private val _photoLink = MutableLiveData<String>("")
+    val photoLink = _photoLink
+
+    fun saveMarker(marker: MapMarkers) {
+        repository.addMarker(marker)
+    }
     fun getMarkers() {
         repository.getMarkers().addSnapshotListener { value, error ->
             if (error != null) {
@@ -92,7 +98,7 @@ class MapViewModel : ViewModel() {
             if (value != null && value.exists()) {
                 val marker = value.toObject(MapMarkers::class.java)
                 if (marker != null) {
-                    _actualMarker.value = marker
+                    _actualMarker.value = marker!!
                     _markerTitle.value = _actualMarker.value!!.title
                 } else {
                     Log.d("MarkerRepository", "Current data: null")
@@ -109,6 +115,10 @@ class MapViewModel : ViewModel() {
         val storage = FirebaseStorage.getInstance().getReference("images/$fileName")
         storage.putFile(imageUri)
             .addOnSuccessListener {
+                storage.downloadUrl.addOnSuccessListener {
+                    _photoLink.value = it.toString()
+                    Log.i("IMAGEN", it.toString())
+                }
                 Log.d("Upload", "Image uploaded")
             }
             .addOnFailureListener {
