@@ -7,7 +7,6 @@ sealed class Routes(val route:String) {
     object GalleryScreen:Routes("galery_screen")
     object TakePhotoScreen:Routes("take_photo_screen")
     object AddMarkerScreen:Routes("add_marker_screen")
-
     object EditScreen:Routes("edit_screen/{title}")
 
 

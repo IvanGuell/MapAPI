@@ -71,6 +71,7 @@ class MapViewModel : ViewModel() {
     fun saveMarker(marker: MapMarkers) {
         repository.addMarker(marker)
     }
+
     fun getMarkers() {
         repository.getMarkers().addSnapshotListener { value, error ->
             if (error != null) {

@@ -38,6 +38,7 @@ import com.example.mapapp.viewmodel.MapViewModel
 import javax.xml.transform.Source
 
 
+
 @Composable
 fun GalleryScreen(navController: NavController, mapViewModel: MapViewModel) {
     val context = LocalContext.current

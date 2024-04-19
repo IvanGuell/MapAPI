@@ -84,6 +84,7 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, on
             }
         })
 
+
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(controller = controller, modifier = Modifier.fillMaxSize())
         IconButton(

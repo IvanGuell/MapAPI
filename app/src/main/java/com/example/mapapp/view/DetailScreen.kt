@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mapapp.viewmodel.MapViewModel
 
+
 @Composable
 fun DetailScreen(
     navController: NavController,

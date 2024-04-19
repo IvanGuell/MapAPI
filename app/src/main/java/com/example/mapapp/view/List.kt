@@ -45,6 +45,7 @@ import com.example.mapapp.viewmodel.MapViewModel
 import com.example.mapapp.viewmodel.Marker
 
 
+
 @Composable
 fun List(navController: NavController, mapViewModel: MapViewModel) {
     val lazyColumnState = rememberLazyListState()

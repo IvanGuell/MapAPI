@@ -7,6 +7,7 @@ data class MapMarkers(
         var snippet: String,
         var photo: String?
 ){
+
         constructor(): this("", "", 0.0, 0.0, "", "", null)
 
 
