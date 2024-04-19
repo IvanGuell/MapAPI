@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.mapapp.firebase.Repository
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -31,8 +30,8 @@ class MapViewModel : ViewModel() {
 
     private var position = LatLng(41.4534265, 2.1837151)
 
-    private val _searchedMarkers = MutableLiveData<List<Marker>>()
-    val searchedMarkers: LiveData<List<Marker>> = _searchedMarkers
+    private val _searchedMarkers = MutableLiveData<List<MapMarkers>>()
+    val searchedMarkers: LiveData<List<MapMarkers>> = _searchedMarkers
 
     private val _cameraPermissionGranted = MutableLiveData(false)
     val cameraPermissionGranted = _cameraPermissionGranted
@@ -69,7 +68,10 @@ class MapViewModel : ViewModel() {
     val photoLink = _photoLink
 
     fun saveMarker(marker: MapMarkers) {
+        
         repository.addMarker(marker)
+        
+        
     }
 
     fun getMarkers() {
@@ -140,7 +142,7 @@ class MapViewModel : ViewModel() {
         _snippetText.value = ""
         _photoTaken.value = null
     }
-    fun saveMarker() {
+    fun savedMarker() {
         _isMarkerSaved.value = true
     }
 
@@ -188,7 +190,7 @@ class MapViewModel : ViewModel() {
     private val _markers = MutableLiveData<List<Marker>>()
     val markers: LiveData<List<Marker>> = _markers
 
-    fun addMarker(marker: Marker) {
+    fun addMarker(marker: MapMarkers) {
         val currentList = _markers.value.orEmpty().toMutableList()
         currentList.add(marker)
         _markers.value = currentList
@@ -205,9 +207,3 @@ class MapViewModel : ViewModel() {
 
 
 
-data class Marker(
-    val position: LatLng,
-    val title: String,
-    val snippet: String,
-    val photo: Bitmap? = null
-)

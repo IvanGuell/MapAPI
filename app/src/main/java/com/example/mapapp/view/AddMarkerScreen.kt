@@ -1,6 +1,7 @@
 package com.example.mapapp.view
 
 
+import MapMarkers
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -116,13 +117,21 @@ fun AddMarkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-
+                    
                     mapViewModel.setShowState(false)
-
                     val latLng = mapViewModel.getPosition()
                     val photoBitmap = mapViewModel.photoTaken.value
-                    val markerToAdd = Marker(latLng, title, snippet, photoBitmap)
+                    val markerToAdd = MapMarkers(
+                     
+                        icon = 0,
+                        lat = latLng.latitude,
+                        lng = latLng.longitude,
+                        title = title,
+                        snippet = snippet,
+                        photo = null
+                    )
                     mapViewModel.addMarker(markerToAdd)
+                    mapViewModel.saveMarker(markerToAdd)
                     navController.navigate(Routes.MapScreen.route)
                     mapViewModel.resetInputFields()
                 },
