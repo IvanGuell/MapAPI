@@ -1,5 +1,6 @@
 package com.example.mapapp.view
 
+import MapMarkers
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,14 +43,14 @@ import androidx.navigation.NavController
 
 import com.example.mapapp.MyDrawer
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.mapapp.viewmodel.Marker
+
 
 
 
 @Composable
 fun List(navController: NavController, mapViewModel: MapViewModel) {
     val lazyColumnState = rememberLazyListState()
-    val marcadores: List<Marker> by mapViewModel.markers.observeAsState(emptyList())
+    val marcadores: List<MapMarkers> by mapViewModel.markers.observeAsState(emptyList())
     val searchTextState = remember { mutableStateOf(TextFieldValue()) }
 
     Column(
@@ -60,7 +61,7 @@ fun List(navController: NavController, mapViewModel: MapViewModel) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            MySearchBar(navController,mapViewModel)
+//            MySearchBar(navController,mapViewModel)
             Spacer(modifier = Modifier.height(8.dp))
             LazyColumn(
                 state = lazyColumnState
@@ -86,7 +87,7 @@ fun filtredItem(){
 
 @Composable
 fun item(
-    marker: Marker,
+    marker: MapMarkers,
     navController: NavController,
     mapViewModel: MapViewModel
 ) {
@@ -125,43 +126,43 @@ fun item(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MySearchBar(
-    navController: NavController,
-    mapViewModel: MapViewModel
-) {
-    val searchedMarkers by mapViewModel.searchedMarkers.observeAsState(emptyList())
-    val searchText = searchedMarkers.joinToString(separator = "\n") { it.title }
-
-    SearchBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(70.dp),
-        query = searchText,
-        onQueryChange = { mapViewModel.onSearchTextChange(it) },
-        onSearch = { mapViewModel.onSearchTextChange(it) },
-        active = true,
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Filled.Search,
-                contentDescription = "",
-                tint = Color(0xFFFFFFFF)
-            )
-        },
-        placeholder = {
-            Text(
-                "Buscar marcadores...",
-                style = TextStyle(fontSize = 20.sp),
-                color = Color(0x81DEDCE0)
-            )
-        },
-        onActiveChange = {},
-        colors = SearchBarDefaults.colors(
-            containerColor = Color(0xFFFFFFFF),
-            inputFieldColors = TextFieldDefaults.textFieldColors(
-                focusedTextColor = Color(0xFFFFFFFF),
-            )
-        ),
-    ) {}
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun MySearchBar(
+//    navController: NavController,
+//    mapViewModel: MapViewModel
+//) {
+//    val searchedMarkers by mapViewModel.searchedMarkers.observeAsState(emptyList())
+//    val searchText = searchedMarkers.joinToString(separator = "\n") { it.title }
+//
+//    SearchBar(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(70.dp),
+//        query = searchText,
+//        onQueryChange = { mapViewModel.onSearchTextChange(it) },
+//        onSearch = { mapViewModel.onSearchTextChange(it) },
+//        active = true,
+//        leadingIcon = {
+//            Icon(
+//                imageVector = Icons.Filled.Search,
+//                contentDescription = "",
+//                tint = Color(0xFFFFFFFF)
+//            )
+//        },
+//        placeholder = {
+//            Text(
+//                "Buscar marcadores...",
+//                style = TextStyle(fontSize = 20.sp),
+//                color = Color(0x81DEDCE0)
+//            )
+//        },
+//        onActiveChange = {},
+//        colors = SearchBarDefaults.colors(
+//            containerColor = Color(0xFFFFFFFF),
+//            inputFieldColors = TextFieldDefaults.textFieldColors(
+//                focusedTextColor = Color(0xFFFFFFFF),
+//            )
+//        ),
+//    ) {}
+//}

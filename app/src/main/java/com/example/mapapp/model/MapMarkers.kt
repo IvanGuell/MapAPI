@@ -1,8 +1,7 @@
 data class MapMarkers(
 
         var icon: Int,
-        var lat: Double,
-        var lng: Double,
+        var location: com.google.android.gms.maps.model.LatLng,
         var title: String,
         var snippet: String,
         var photo: String?

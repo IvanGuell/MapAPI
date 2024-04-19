@@ -12,11 +12,9 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,9 +42,6 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.mapapp.viewmodel.Marker
-
-
 
 
 @Composable
@@ -124,8 +119,7 @@ fun AddMarkerScreen(
                     val markerToAdd = MapMarkers(
                      
                         icon = 0,
-                        lat = latLng.latitude,
-                        lng = latLng.longitude,
+                        location = latLng,
                         title = title,
                         snippet = snippet,
                         photo = null

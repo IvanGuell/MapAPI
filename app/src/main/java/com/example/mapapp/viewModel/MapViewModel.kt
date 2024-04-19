@@ -84,7 +84,6 @@ class MapViewModel : ViewModel() {
             for (dc: DocumentChange in value?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     val newMarker = dc.document.toObject(MapMarkers::class.java)
-                    newMarker.uid = dc.document.id
                     tempList.add(newMarker)
                 }
             }
@@ -164,15 +163,15 @@ class MapViewModel : ViewModel() {
         _showPermissionDenied.value = denied
     }
 
-    fun onSearchTextChange(keyword: String) {
-        val allMarkers = _markers.value.orEmpty()
-        if (keyword.isNotBlank()) {
-            val filteredMarkers = allMarkers.filter{ it.title.contains(keyword, ignoreCase = true) }
-            _searchedMarkers.value = filteredMarkers
-        } else {
-            _searchedMarkers.value = allMarkers
-        }
-    }
+//    fun onSearchTextChange(keyword: String) {
+//        val allMarkers = _markers.value.orEmpty()
+//        if (keyword.isNotBlank()) {
+//            val filteredMarkers = allMarkers.filter{ it.title.contains(keyword, ignoreCase = true) }
+//            _searchedMarkers.value = filteredMarkers
+//        } else {
+//            _searchedMarkers.value = allMarkers
+//        }
+//    }
 
     fun setShowState(show: Boolean){
         _showBottomSheet.value = show
@@ -187,8 +186,8 @@ class MapViewModel : ViewModel() {
         return position
     }
 
-    private val _markers = MutableLiveData<List<Marker>>()
-    val markers: LiveData<List<Marker>> = _markers
+    private val _markers = MutableLiveData<List<MapMarkers>>()
+    val markers: LiveData<List<MapMarkers>> = _markers
 
     fun addMarker(marker: MapMarkers) {
         val currentList = _markers.value.orEmpty().toMutableList()
@@ -196,7 +195,7 @@ class MapViewModel : ViewModel() {
         _markers.value = currentList
     }
 
-    fun removeMarker(marker: Marker) {
+    fun removeMarker(marker: MapMarkers) {
         val currentList = _markers.value.orEmpty().toMutableList()
         currentList.remove(marker)
         _markers.value = currentList
