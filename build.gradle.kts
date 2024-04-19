@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.8.10" apply false
     id("com.google.gms.google-services") version "4.4.1" apply false
 }
+
 buildscript{
     val kotlin_version by extra("1.9.22")
     dependencies{
