@@ -1,5 +1,6 @@
 package com.example.mapapp.view
 
+import MapMarkers
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.mapapp.viewmodel.Marker
 
 @Composable
 fun EditScreen(
@@ -53,7 +53,12 @@ fun EditScreen(
             if (marker != null) {
                 mapViewModel.removeMarker(marker)
                 val newPhoto = mapViewModel.photoTaken.value
-                val newMarker = Marker(marker.position, newTitle, newSnippet, newPhoto)
+                val newMarker = MapMarkers(
+                    id = "0",
+                    position = latLng,
+                    title = title,
+                    snippet = snippet,
+                    photo = photoBitmap)
                 mapViewModel.addMarker(newMarker)
             }
             navController.popBackStack()

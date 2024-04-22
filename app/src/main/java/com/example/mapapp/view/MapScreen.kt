@@ -1,5 +1,6 @@
 package com.example.mapapp.view
 
+import MapMarkers
 import android.annotation.SuppressLint
 import android.location.Location
 import android.util.Log
@@ -21,7 +22,7 @@ import androidx.navigation.NavController
 import com.example.mapapp.MainActivity
 import com.example.mapapp.MyDrawer
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.mapapp.viewmodel.Marker
+
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -96,7 +97,7 @@ fun MapScreen(
                     )
                 }
             }
-            val marcadores: List<Marker> by mapViewModel.markers.observeAsState(
+            val marcadores: List<MapMarkers> by mapViewModel.markers.observeAsState(
                 emptyList()
             )
             marcadores.forEach { marker ->

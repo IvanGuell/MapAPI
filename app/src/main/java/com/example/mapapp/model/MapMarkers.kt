@@ -1,14 +1,10 @@
+import com.google.android.gms.maps.model.LatLng
+
 data class MapMarkers(
-        var mid: String,
-        var uid: String,
-        var lat: Double,
-        var lng: Double,
+        var id: String,
+        var position: LatLng,
         var title: String,
         var snippet: String,
         var photo: String?
 
-){
-        constructor(): this("", "", 0.0, 0.0, "", "", null)
-
-
-}
+)

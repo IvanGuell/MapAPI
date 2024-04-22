@@ -1,6 +1,7 @@
 package com.example.mapapp.view
 
 
+import MapMarkers
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -43,7 +44,6 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.viewmodel.MapViewModel
-import com.example.mapapp.viewmodel.Marker
 
 
 
@@ -120,7 +120,14 @@ fun AddMarkerScreen(
 
                     val latLng = mapViewModel.getPosition()
                     val photoBitmap = mapViewModel.photoTaken.value
-                    val markerToAdd = Marker(latLng, title, snippet, photoBitmap)
+                    val markerToAdd = MapMarkers(
+                        id = "0",
+                        position = latLng,
+                        title = title,
+                        snippet = snippet,
+                        photo = photoBitmap)
+
+
                     mapViewModel.addMarker(markerToAdd)
                     navController.navigate(Routes.MapScreen.route)
                     mapViewModel.resetInputFields()

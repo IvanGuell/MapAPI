@@ -13,10 +13,11 @@ class Repository {
         database.collection("markers")
             .add(
                 hashMapOf(
-                    "mid" to marker.mid,
-                    "uid" to marker.uid,
-                    "lat" to marker.lat,
-                    "lng" to marker.lng,
+                    "id" to marker.id,
+                    "position" to hashMapOf(
+                        "latitude" to marker.position.latitude,
+                        "longitude" to marker.position.longitude
+                    ),
                     "title" to marker.title,
                     "snippet" to marker.snippet,
                     "photo" to marker.photo
@@ -25,12 +26,14 @@ class Repository {
     }
     fun editMarker(editMarker: MapMarkers){
         database.collection("markers")
-            .document(editMarker.uid)
+            .document(editMarker.id)
             .set(
                 hashMapOf(
-                    "uid" to editMarker.uid,
-                    "lat" to editMarker.lat,
-                    "lng" to editMarker.lng,
+                    "uid" to editMarker.id,
+                    "position" to hashMapOf(
+                        "latitude" to editMarker.position.latitude,
+                        "longitude" to editMarker.position.longitude
+                    ),
                     "title" to editMarker.title,
                     "snippet" to editMarker.snippet,
                     "photo" to editMarker.photo

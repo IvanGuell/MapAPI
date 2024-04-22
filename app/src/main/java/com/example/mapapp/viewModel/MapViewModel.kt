@@ -31,8 +31,8 @@ class MapViewModel : ViewModel() {
 
     private var position = LatLng(41.4534265, 2.1837151)
 
-    private val _searchedMarkers = MutableLiveData<List<Marker>>()
-    val searchedMarkers: LiveData<List<Marker>> = _searchedMarkers
+    private val _searchedMarkers = MutableLiveData<List<MapMarkers>>()
+    val searchedMarkers: LiveData<List<MapMarkers>> = _searchedMarkers
 
     private val _cameraPermissionGranted = MutableLiveData(false)
     val cameraPermissionGranted = _cameraPermissionGranted
@@ -75,7 +75,7 @@ class MapViewModel : ViewModel() {
             for (dc: DocumentChange in value?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     val newMarker = dc.document.toObject(MapMarkers::class.java)
-                    newMarker.uid = dc.document.id
+                    newMarker.id = dc.document.id
                     tempList.add(newMarker)
                 }
             }
@@ -92,7 +92,7 @@ class MapViewModel : ViewModel() {
             if (value != null && value.exists()) {
                 val marker = value.toObject(MapMarkers::class.java)
                 if (marker != null) {
-                    _actualMarker.value = marker
+                    _actualMarker.value = marker!!
                     _markerTitle.value = _actualMarker.value!!.title
                 } else {
                     Log.d("MarkerRepository", "Current data: null")
@@ -174,16 +174,16 @@ class MapViewModel : ViewModel() {
         return position
     }
 
-    private val _markers = MutableLiveData<List<Marker>>()
-    val markers: LiveData<List<Marker>> = _markers
+    private val _markers = MutableLiveData<List<MapMarkers>>()
+    val markers: LiveData<List<MapMarkers>> = _markers
 
-    fun addMarker(marker: Marker) {
+    fun addMarker(marker: MapMarkers) {
         val currentList = _markers.value.orEmpty().toMutableList()
         currentList.add(marker)
         _markers.value = currentList
     }
 
-    fun removeMarker(marker: Marker) {
+    fun removeMarker(marker: MapMarkers) {
         val currentList = _markers.value.orEmpty().toMutableList()
         currentList.remove(marker)
         _markers.value = currentList
@@ -194,9 +194,3 @@ class MapViewModel : ViewModel() {
 
 
 
-data class Marker(
-    val position: LatLng,
-    val title: String,
-    val snippet: String,
-    val photo: Bitmap? = null
-)
