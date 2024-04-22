@@ -65,6 +65,7 @@ dependencies {
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 
 
+
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation ("com.google.firebase:firebase-storage-ktx")

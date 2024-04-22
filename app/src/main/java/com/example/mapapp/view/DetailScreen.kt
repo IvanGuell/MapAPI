@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mapapp.viewmodel.MapViewModel
 
+
 @Composable
 fun DetailScreen(
     navController: NavController,
@@ -30,12 +31,11 @@ fun DetailScreen(
     {
         Text(text = "Nombre: ${marker?.title}")
         Text(text = "Descripción: ${marker?.snippet}")
-        Text(text = "Latitud: ${marker?.position?.latitude}")
-        Text(text = "Longitud: ${marker?.position?.longitude}")
+        Text(text = "Location: ${marker?.location}")
         // Aquí debes agregar el código para mostrar la imagen del marcador
         marker?.photo?.let { photo ->
-            val imageBitmap = photo.asImageBitmap()
-            Image(bitmap = imageBitmap, contentDescription = "Foto del marcador")
+//            val imageBitmap = photo.asImageBitmap()
+//            Image(bitmap = imageBitmap, contentDescription = "Foto del marcador")
         }
 
         Button(onClick = { navController.navigate("edit_screen/${marker?.title}") }) {
