@@ -97,12 +97,12 @@ fun MapScreen(
                     )
                 }
             }
-            val marcadores: List<MapMarkers> by mapViewModel.markers.observeAsState(
+            val marcadores: List<MapMarkers> by mapViewModel.markerList.observeAsState(
                 emptyList()
             )
             marcadores.forEach { marker ->
                 Marker(
-                    state = MarkerState(marker.position),
+                    state = MarkerState(LatLng(marker.position.latitude, marker.position.longitude)),
                     title = marker.title,
                     snippet = marker.snippet
                 )

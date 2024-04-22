@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.mapapp.firebase.Repository
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -65,7 +64,7 @@ class MapViewModel : ViewModel() {
 
     private val repository = Repository()
 
-    fun getMarkers() {
+    fun subscribeToMarkers() {
         repository.getMarkers().addSnapshotListener { value, error ->
             if (error != null) {
                 Log.e("Firestore Error", error.message.toString())
@@ -73,13 +72,13 @@ class MapViewModel : ViewModel() {
             }
             val tempList = mutableListOf<MapMarkers>()
             for (dc: DocumentChange in value?.documentChanges!!) {
-                if (dc.type == DocumentChange.Type.ADDED) {
+//                if (dc.type == DocumentChange.Type.ADDED) {
                     val newMarker = dc.document.toObject(MapMarkers::class.java)
                     newMarker.id = dc.document.id
                     tempList.add(newMarker)
-                }
+//                }
             }
-            _markerList.value = tempList
+            _markerList.postValue(tempList)
         }
     }
 
@@ -151,15 +150,15 @@ class MapViewModel : ViewModel() {
         _showPermissionDenied.value = denied
     }
 
-    fun onSearchTextChange(keyword: String) {
-        val allMarkers = _markers.value.orEmpty()
-        if (keyword.isNotBlank()) {
-            val filteredMarkers = allMarkers.filter{ it.title.contains(keyword, ignoreCase = true) }
-            _searchedMarkers.value = filteredMarkers
-        } else {
-            _searchedMarkers.value = allMarkers
-        }
-    }
+//    fun onSearchTextChange(keyword: String) {
+//        val allMarkers = _markers.value.orEmpty()
+//        if (keyword.isNotBlank()) {
+//            val filteredMarkers = allMarkers.filter{ it.title.contains(keyword, ignoreCase = true) }
+//            _searchedMarkers.value = filteredMarkers
+//        } else {
+//            _searchedMarkers.value = allMarkers
+//        }
+//    }
 
     fun setShowState(show: Boolean){
         _showBottomSheet.value = show
@@ -174,19 +173,19 @@ class MapViewModel : ViewModel() {
         return position
     }
 
-    private val _markers = MutableLiveData<List<MapMarkers>>()
-    val markers: LiveData<List<MapMarkers>> = _markers
 
     fun addMarker(marker: MapMarkers) {
-        val currentList = _markers.value.orEmpty().toMutableList()
-        currentList.add(marker)
-        _markers.value = currentList
+        repository.addMarker(marker)
+//        val currentList = _markers.value.orEmpty().toMutableList()
+//        currentList.add(marker)
+//        _markers.value = currentList
     }
 
     fun removeMarker(marker: MapMarkers) {
-        val currentList = _markers.value.orEmpty().toMutableList()
-        currentList.remove(marker)
-        _markers.value = currentList
+        repository.deleteMarker(marker.id)
+//        val currentList = _markers.value.orEmpty().toMutableList()
+//        currentList.remove(marker)
+//        _markers.value = currentList
     }
 
 }

@@ -50,7 +50,7 @@ import com.example.mapapp.viewmodel.MapViewModel
 @Composable
 fun List(navController: NavController, mapViewModel: MapViewModel) {
     val lazyColumnState = rememberLazyListState()
-    val marcadores: List<MapMarkers> by mapViewModel.markers.observeAsState(emptyList())
+    val marcadores: List<MapMarkers> by mapViewModel.markerList.observeAsState(emptyList())
     val searchTextState = remember { mutableStateOf(TextFieldValue()) }
 
     Column(

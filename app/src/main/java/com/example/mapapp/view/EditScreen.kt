@@ -25,7 +25,7 @@ fun EditScreen(
     mapViewModel: MapViewModel
 ){
     val title = navController.currentBackStackEntry?.arguments?.getString("title")
-    val marker = mapViewModel.markers.value?.find { it.title == title }
+    val marker = mapViewModel.markerList.value?.find { it.title == title }
     var newTitle by remember { mutableStateOf(marker?.title ?: "") }
     var newSnippet by remember { mutableStateOf(marker?.snippet ?: "") }
 
@@ -52,14 +52,14 @@ fun EditScreen(
         Button(onClick = {
             if (marker != null) {
                 mapViewModel.removeMarker(marker)
-                val newPhoto = mapViewModel.photoTaken.value
-                val newMarker = MapMarkers(
-                    id = "0",
-                    position = latLng,
-                    title = title,
-                    snippet = snippet,
-                    photo = photoBitmap)
-                mapViewModel.addMarker(newMarker)
+//                val newPhoto = mapViewModel.photoTaken.value
+//                val newMarker = MapMarkers(
+//                    id = "0",
+//                    position = latLng,
+//                    title = title,
+//                    snippet = snippet,
+//                    photo = photoBitmap)
+//                mapViewModel.addMarker(newMarker)
             }
             navController.popBackStack()
         }) {

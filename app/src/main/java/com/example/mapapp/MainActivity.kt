@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val mapViewModel by viewModels<MapViewModel>()
+        mapViewModel.subscribeToMarkers()
         setContent {
             val navigationController = rememberNavController()
 

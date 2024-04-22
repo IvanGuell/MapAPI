@@ -22,7 +22,7 @@ fun DetailScreen(
     mapViewModel: MapViewModel
 ){
     val title = navController.currentBackStackEntry?.arguments?.getString("title")
-    val marker = mapViewModel.markers.value?.find { it.title == title }
+    val marker = mapViewModel.markerList.value?.find { it.title == title }
 
     Column(
         modifier = Modifier
@@ -31,7 +31,7 @@ fun DetailScreen(
     {
         Text(text = "Nombre: ${marker?.title}")
         Text(text = "Descripción: ${marker?.snippet}")
-        Text(text = "Location: ${marker?.location}")
+//        Text(text = "Location: ${marker?.location}")
         // Aquí debes agregar el código para mostrar la imagen del marcador
         marker?.photo?.let { photo ->
 //            val imageBitmap = photo.asImageBitmap()
