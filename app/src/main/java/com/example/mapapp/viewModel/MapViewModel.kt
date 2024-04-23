@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mapapp.firebase.Repository
+import com.example.mapapp.model.User
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
@@ -18,6 +20,16 @@ import java.util.Locale
 
 
 class MapViewModel : ViewModel() {
+
+    private val authenticator  = FirebaseAuth.getInstance()
+    private val _goToNext = MutableLiveData(false)
+    val goToNext = _goToNext
+
+    private val _showProgressBar = MutableLiveData(false)
+    val showProgressBar = _showProgressBar
+
+    private val _userList = MutableLiveData<List<User>>()
+    val userList: LiveData<List<User>> = _userList
 
 
     private val _markerList = MutableLiveData<List<MapMarkers>>()
@@ -88,6 +100,58 @@ class MapViewModel : ViewModel() {
             _markerList.postValue(tempList)
         }
     }
+    fun subscribeToUsers() {
+        repository.getUsers().addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.e("Firestore Error", error.message.toString())
+                return@addSnapshotListener
+
+            }
+
+            val tempList = mutableListOf<User>()
+            for (dc: DocumentChange in value?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+
+                    val newUser = dc.document.toObject(User::class.java)
+                    newUser.userid = dc.document.id
+
+                    tempList.add(newUser)
+
+                }
+            }
+
+            _userList.postValue(tempList)
+        }
+    }
+    fun register (username: String, password: String){
+        authenticator.createUserWithEmailAndPassword(username, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Register", "User registered")
+                    _goToNext.value = true
+                } else {
+                    _goToNext.value = false
+                    Log.e("Register", "Error registering user ${ task.result }")
+                }
+                    modifyProcessing()
+            }
+    }
+
+    fun login (username: String?, password: String?) {
+        authenticator.signInWithEmailAndPassword(username!!, password!!)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _userId.value = task.result.user?.uid
+                    _loggedUser.value = task.result.user?.email?.split("@")?.get(0)
+                    _goToNext.value = true
+                    Log.d("Login", "User logged in")
+                } else {
+                    _goToNext.value = false
+                    Log.e("Login", "Error logging in user ${task.result}")
+                }
+                modifyProcessing()
+            }
+    }
 
     fun getMarker(markerId: String){
         repository.getMarker(markerId).addSnapshotListener { value, error ->
@@ -107,7 +171,9 @@ class MapViewModel : ViewModel() {
         }
     }
 
-
+    private fun modifyProcessing() {
+        _showProgressBar.value = true
+    }
     fun uploadImage(bitmap: Bitmap, onSuccess: (String) -> Unit) {
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
         val now = Date()
