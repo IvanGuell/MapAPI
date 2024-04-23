@@ -122,7 +122,7 @@ fun AddMarkerScreen(
                     val latLng = mapViewModel.getPosition()
 //                    val photoBitmap = mapViewModel.photoTaken.value
                     val markerToAdd = MapMarkers(
-                        id = "0",
+                        id = null,
                         position = LatLong(latLng.latitude, latLng.longitude),
                         title = title,
                         snippet = snippet,

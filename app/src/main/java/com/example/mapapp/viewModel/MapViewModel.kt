@@ -69,15 +69,22 @@ class MapViewModel : ViewModel() {
             if (error != null) {
                 Log.e("Firestore Error", error.message.toString())
                 return@addSnapshotListener
+
             }
+
             val tempList = mutableListOf<MapMarkers>()
             for (dc: DocumentChange in value?.documentChanges!!) {
-//                if (dc.type == DocumentChange.Type.ADDED) {
+                log
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    l
                     val newMarker = dc.document.toObject(MapMarkers::class.java)
                     newMarker.id = dc.document.id
+                    log
                     tempList.add(newMarker)
-//                }
+                    log
+                }
             }
+
             _markerList.postValue(tempList)
         }
     }
@@ -182,7 +189,7 @@ class MapViewModel : ViewModel() {
     }
 
     fun removeMarker(marker: MapMarkers) {
-        repository.deleteMarker(marker.id)
+        repository.deleteMarker(marker.id!!)
 //        val currentList = _markers.value.orEmpty().toMutableList()
 //        currentList.remove(marker)
 //        _markers.value = currentList
