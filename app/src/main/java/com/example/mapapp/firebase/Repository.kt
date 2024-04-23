@@ -64,33 +64,33 @@ class Repository {
     }
 
 
-    fun addUser(user: User) {
-        database.collection("users")
-            .add(
-                hashMapOf(
+//    fun addUser(user: User) {
+//        database.collection("users")
+//            .add(
+//                hashMapOf(
+//
+//                    "userId" to user.userId,
+//                    "userName" to user.userName,
+//                    "age" to user.age,
+//                    "profilePicture" to user.profilePicture
+//                )
+//            ).addOnSuccessListener { documentReference ->
+//                Log.d("REPOSITORIO", "MARCADOR AÑADIDO CON ID: ${documentReference.id}")
+//            }
+//    }
 
-                    "userId" to user.userId,
-                    "userName" to user.userName,
-                    "age" to user.age,
-                    "profilePicture" to user.profilePicture
-                )
-            ).addOnSuccessListener { documentReference ->
-                Log.d("REPOSITORIO", "MARCADOR AÑADIDO CON ID: ${documentReference.id}")
-            }
-    }
-
-    fun editUser(editUser: User){
-        database.collection("users")
-            .document(editUser.userId!!)
-            .set(
-                hashMapOf(
-                    "userId" to editUser.userId,
-                    "userName" to editUser.userName,
-                    "age" to editUser.age,
-                    "profilePicture" to editUser.profilePicture
-                )
-            )
-    }
+//    fun editUser(editUser: User){
+//        database.collection("users")
+//            .document(editUser.userId!!)
+//            .set(
+//                hashMapOf(
+//                    "userId" to editUser.userId,
+//                    "userName" to editUser.userName,
+//                    "age" to editUser.age,
+//                    "profilePicture" to editUser.profilePicture
+//                )
+//            )
+//    }
 
     fun deleteUser(userId: String){
         database.collection("users")

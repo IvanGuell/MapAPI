@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.mapapp.firebase.Repository
 import com.example.mapapp.model.User
 import com.google.android.gms.maps.model.LatLng
@@ -144,7 +145,7 @@ class MapViewModel : ViewModel() {
             }
     }
 
-    fun login (username: String?, password: String?) {
+    fun login (username: String?, password: String?, navController: NavController) {
         authenticator.signInWithEmailAndPassword(username!!, password!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
