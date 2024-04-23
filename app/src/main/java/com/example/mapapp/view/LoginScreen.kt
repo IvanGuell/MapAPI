@@ -29,7 +29,12 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
             onValueChange = { password = it },
             label = { Text("Password") }
         )
-        Button(onClick = { mapViewModel.login(email, password, navController) }) {
+        Button(onClick = {
+            mapViewModel.login(email, password, navController)
+            navController.navigate(Routes.MapScreen.route)
+
+        })
+        {
             Text("Login")
         }
         Button(onClick = { navController.navigate(Routes.RegisterScreen.route) }) {
