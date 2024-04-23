@@ -11,6 +11,7 @@ import com.example.mapapp.firebase.Repository
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -74,14 +75,13 @@ class MapViewModel : ViewModel() {
 
             val tempList = mutableListOf<MapMarkers>()
             for (dc: DocumentChange in value?.documentChanges!!) {
-                log
                 if (dc.type == DocumentChange.Type.ADDED) {
-                    l
+
                     val newMarker = dc.document.toObject(MapMarkers::class.java)
                     newMarker.id = dc.document.id
-                    log
+
                     tempList.add(newMarker)
-                    log
+
                 }
             }
 
@@ -108,14 +108,22 @@ class MapViewModel : ViewModel() {
     }
 
 
-    fun uploadImage(imageUri: Uri) {
+    fun uploadImage(bitmap: Bitmap, onSuccess: (String) -> Unit) {
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
         val now = Date()
         val fileName = formatter.format(now)
-        val storage = FirebaseStorage.getInstance().getReference("images/$fileName")
-        storage.putFile(imageUri)
+        val storageRef = FirebaseStorage.getInstance().getReference("images/$fileName")
+
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        storageRef.putBytes(data)
             .addOnSuccessListener {
                 Log.d("Upload", "Image uploaded")
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    onSuccess(uri.toString())
+                }
             }
             .addOnFailureListener {
                 Log.e("Upload", "Error uploading image")

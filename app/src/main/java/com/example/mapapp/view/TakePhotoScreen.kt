@@ -64,10 +64,8 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, on
     var bitmap by remember { mutableStateOf(img) }
 
     val launchImage = rememberLauncherForActivityResult(
-
         contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            uri: Uri? ->
+        onResult = { uri: Uri? ->
             uri?.let { selectedImageUri ->
                 try {
                     val bitmapFromUri = if (Build.VERSION.SDK_INT < 28) {
@@ -77,12 +75,17 @@ fun TakePhotoScreen(navController: NavController, mapViewModel: MapViewModel, on
                         ImageDecoder.decodeBitmap(source)
                     }
                     bitmap = bitmapFromUri
-                    if (uri != null) mapViewModel.uploadImage(uri)
+                    if (bitmap != null) {
+                        mapViewModel.uploadImage(bitmap!!) { imageUrl ->
+                            // Handle the imageUrl here
+                        }
+                    }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
-        })
+        }
+    )
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -192,10 +195,9 @@ private fun takePhoto(
             override fun onError(exception: ImageCaptureException) {
                 super.onError(exception)
                 Log.e("Camera", "Error taking photo", exception)
-        }
+            }
         }
     )
-
 }
 
 

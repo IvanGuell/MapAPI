@@ -116,23 +116,23 @@ fun AddMarkerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-
                     mapViewModel.setShowState(false)
 
                     val latLng = mapViewModel.getPosition()
-//                    val photoBitmap = mapViewModel.photoTaken.value
-                    val markerToAdd = MapMarkers(
-                        id = null,
-                        position = LatLong(latLng.latitude, latLng.longitude),
-                        title = title,
-                        snippet = snippet,
-                        photo = null
+                    val photoBitmap = mapViewModel.photoTaken.value
+                    mapViewModel.uploadImage(photoBitmap!!) { imageUrl ->
+                        val markerToAdd = MapMarkers(
+                            id = null,
+                            position = LatLong(latLng.latitude, latLng.longitude),
+                            title = title,
+                            snippet = snippet,
+                            photo = imageUrl
                         )
 
-
-                    mapViewModel.addMarker(markerToAdd)
-                    navController.navigate(Routes.MapScreen.route)
-                    mapViewModel.resetInputFields()
+                        mapViewModel.addMarker(markerToAdd)
+                        navController.navigate(Routes.MapScreen.route)
+                        mapViewModel.resetInputFields()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Color(0xffFF914D)),
                 modifier = Modifier.width(150.dp)
