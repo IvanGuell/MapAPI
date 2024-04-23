@@ -6,14 +6,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.mapapp.viewmodel.MapViewModel
+
 
 
 @Composable
@@ -31,11 +37,14 @@ fun DetailScreen(
     {
         Text(text = "Nombre: ${marker?.title}")
         Text(text = "Descripción: ${marker?.snippet}")
-//        Text(text = "Location: ${marker?.location}")
-        // Aquí debes agregar el código para mostrar la imagen del marcador
-        marker?.photo?.let { photo ->
-//            val imageBitmap = photo.asImageBitmap()
-//            Image(bitmap = imageBitmap, contentDescription = "Foto del marcador")
+
+        marker?.photo?.let { imageUrl ->
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "Marker Image",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Button(onClick = { navController.navigate("edit_screen/${marker?.title}") }) {
