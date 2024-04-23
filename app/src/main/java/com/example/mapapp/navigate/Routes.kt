@@ -10,6 +10,6 @@ sealed class Routes(val route:String) {
     object EditScreen:Routes("edit_screen/{title}")
 
     object LoginScreen:Routes("login_screen")
-
+    object RegisterScreen:Routes("register_screen")
 
 }

@@ -22,8 +22,15 @@ import java.util.Locale
 class MapViewModel : ViewModel() {
 
     private val authenticator  = FirebaseAuth.getInstance()
+
     private val _goToNext = MutableLiveData(false)
     val goToNext = _goToNext
+
+    private val _userId = MutableLiveData<String>()
+    val userId: LiveData<String> = _userId
+
+    private val _loggedUser = MutableLiveData<String>()
+    val loggedUser: LiveData<String> = _loggedUser
 
     private val _showProgressBar = MutableLiveData(false)
     val showProgressBar = _showProgressBar

@@ -52,6 +52,7 @@ import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.DetailScreen
 import com.example.mapapp.view.EditScreen
 import com.example.mapapp.view.LoginScreen
+import com.example.mapapp.view.RegisterScreen
 import com.example.mapapp.view.TakePhotoScreen
 import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -166,7 +167,7 @@ fun MyScaffold(
             Box(Modifier.padding(it)) {
                 NavHost(
                     navController = navController as NavHostController,
-                    startDestination = Routes.MapScreen.route
+                    startDestination = Routes.LoginScreen.route
                 ) {
                     composable(Routes.MapScreen.route) {
                         MapScreen(navController, mapViewModel)
@@ -189,13 +190,14 @@ fun MyScaffold(
                     composable(Routes.LoginScreen.route) {
                         LoginScreen(navController, mapViewModel)
                     }
+                    composable(Routes.RegisterScreen.route) {
+                        RegisterScreen(navController, mapViewModel)
+                    }
                     composable(Routes.AddMarkerScreen.route) {
                         AddMarkerScreen(
                             navController = navController,
                             mapViewModel = mapViewModel,
                             onCloseBottomSheet = {
-
-
 
                             }
                         )
