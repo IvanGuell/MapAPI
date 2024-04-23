@@ -21,21 +21,21 @@ sealed class Screens(
                         (
                         Routes.MapScreen.route,
                         Icons.Filled.Home,
-                        "MapFlurry"
+                        ""
                 )
 
                 object Listar : DrawerScreens
                         (
                         Routes.List.route,
                         Icons.Filled.List,
-                        "My flurry points"
+                        ""
                 )
 
                 object PositionMarker : DrawerScreens
                         (
                         Routes.DetailScreen.route,
                         Icons.Filled.FavoriteBorder,
-                        "Add flurry point"
+                        ""
                 )
         }
 }

@@ -113,7 +113,7 @@ class MapViewModel : ViewModel() {
                 if (dc.type == DocumentChange.Type.ADDED) {
 
                     val newUser = dc.document.toObject(User::class.java)
-                    newUser.userid = dc.document.id
+                    newUser.userId = dc.document.id
 
                     tempList.add(newUser)
 

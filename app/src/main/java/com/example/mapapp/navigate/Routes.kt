@@ -9,5 +9,7 @@ sealed class Routes(val route:String) {
     object AddMarkerScreen:Routes("add_marker_screen")
     object EditScreen:Routes("edit_screen/{title}")
 
+    object LoginScreen:Routes("login_screen")
+
 
 }

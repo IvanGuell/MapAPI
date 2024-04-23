@@ -51,6 +51,7 @@ import com.example.mapapp.view.List
 import com.example.mapapp.view.MapScreen
 import com.example.mapapp.view.DetailScreen
 import com.example.mapapp.view.EditScreen
+import com.example.mapapp.view.LoginScreen
 import com.example.mapapp.view.TakePhotoScreen
 import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -184,6 +185,9 @@ fun MyScaffold(
                     }
                     composable(Routes.EditScreen.route) {
                         EditScreen(navController, mapViewModel)
+                    }
+                    composable(Routes.LoginScreen.route) {
+                        LoginScreen(navController, mapViewModel)
                     }
                     composable(Routes.AddMarkerScreen.route) {
                         AddMarkerScreen(
