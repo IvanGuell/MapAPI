@@ -12,10 +12,15 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.mapapp.firebase.Repository
 import com.example.mapapp.model.User
+import com.example.mapapp.model.UserPrefs
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -94,8 +99,9 @@ class MapViewModel : ViewModel() {
 
     private val repository = Repository()
 
+
     fun subscribeToMarkers() {
-        repository.getMarkers().addSnapshotListener { value, error ->
+        repository.getMarkers().whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid) .addSnapshotListener { value, error ->
             if (error != null) {
                 Log.e("Firestore Error", error.message.toString())
                 return@addSnapshotListener
@@ -162,13 +168,20 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun login (username: String?, password: String?, navController: NavController) {
+    fun login (username: String?, password: String?, navController: NavController, rememberMe: Boolean, userPrefs: UserPrefs){
+
+
         authenticator.signInWithEmailAndPassword(username!!, password!!)
+
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _userId.value = task.result.user?.uid
                     _loggedUser.value = task.result.user?.email?.split("@")?.get(0)
                     _goToNext.value = true
+                    CoroutineScope(Dispatchers.IO).launch{
+                        userPrefs.saveUserData(username, password, if (rememberMe) "y" else "n")
+                    }
+
                     Log.d("Login", "User logged in")
                 } else {
                     _goToNext.value = false

@@ -3,7 +3,9 @@ package com.example.mapapp.view
 import androidx.navigation.NavController
 import com.example.mapapp.viewmodel.MapViewModel
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import com.example.mapapp.navigate.Routes
 fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var rememberMe by remember { mutableStateOf(false)}
 
     val context = LocalContext.current
     val userPrefs = UserPrefs(context)
@@ -29,9 +32,9 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
     val goToNext by mapViewModel.goToNext.observeAsState(false)
 
     if (storedUserData.value.isNotEmpty() && storedUserData.value[0] != ""
-        && storedUserData.value[1] != "") {
+        && storedUserData.value[1] != "" && storedUserData.value[2] == "y") {
         mapViewModel.modifyProcessingPublic()
-        mapViewModel.login(storedUserData.value[0], storedUserData.value[1], navController)
+        mapViewModel.login(storedUserData.value[0], storedUserData.value[1], navController, storedUserData.value[2] == "y"  , userPrefs)
         if (goToNext) {
             navController.navigate(Routes.MapScreen.route)
         }
@@ -48,7 +51,7 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
             label = { Text("Password") }
         )
         Button(onClick = {
-            mapViewModel.login(email, password, navController)
+            mapViewModel.login(email, password, navController, rememberMe, userPrefs)
             if (goToNext) {
                 navController.navigate(Routes.MapScreen.route)
             }
@@ -58,5 +61,18 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
         Button(onClick = { navController.navigate(Routes.RegisterScreen.route) }) {
             Text("Register")
         }
+
+        Row {
+            Checkbox(
+                checked = rememberMe,
+                onCheckedChange = { rememberMe = it },
+
+                )
+
+            Text("Remember me")
+        }
+
+
+
     }
 }

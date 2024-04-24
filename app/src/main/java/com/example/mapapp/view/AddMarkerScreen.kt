@@ -13,11 +13,9 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,7 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.viewmodel.MapViewModel
-
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -123,6 +121,7 @@ fun AddMarkerScreen(
                     mapViewModel.uploadImage(photoBitmap!!) { imageUrl ->
                         val markerToAdd = MapMarkers(
                             id = null,
+                            userId = FirebaseAuth.getInstance().currentUser?.uid,
                             position = LatLong(latLng.latitude, latLng.longitude),
                             title = title,
                             snippet = snippet,
