@@ -98,7 +98,6 @@ class MainActivity : ComponentActivity() {
 val screensFromDrawer = listOf(
     Screens.DrawerScreens.Mapa,
     Screens.DrawerScreens.Listar,
-    Screens.DrawerScreens.PositionMarker,
     Screens.DrawerScreens.Logout
 )
 
