@@ -15,6 +15,7 @@ class Repository {
 
 
     fun addMarker(marker: MapMarkers): Task<DocumentReference> {
+
         return database.collection("markers")
             .add(
                 hashMapOf(
@@ -26,6 +27,7 @@ class Repository {
                     ),
                     "title" to marker.title,
                     "snippet" to marker.snippet,
+                    "icon" to marker.icon,
                     "photo" to marker.photo
                 )
             ).addOnSuccessListener { documentReference ->

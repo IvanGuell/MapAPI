@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.mapapp.R
 import com.example.mapapp.firebase.Repository
 import com.example.mapapp.model.User
 import com.example.mapapp.model.UserPrefs
@@ -29,19 +30,9 @@ import java.util.Locale
 
 
 class MapViewModel : ViewModel() {
-    private val _isDrawerVisible = MutableLiveData(true)
-    val isDrawerVisible: LiveData<Boolean> = _isDrawerVisible
 
-    fun setDrawerVisibility(isVisible: Boolean) {
-        _isDrawerVisible.value = isVisible
-    }
-    private val _isMenuButtonVisible = MutableLiveData(true)
-    val isMenuButtonVisible: LiveData<Boolean> = _isMenuButtonVisible
-
-    fun setMenuButtonVisibility(isVisible: Boolean) {
-        _isMenuButtonVisible.value = isVisible
-    }
-
+    val markerIcons = listOf(R.drawable.aeropuerto,R.drawable.gas, R.drawable.cine, R.drawable.supermercado, R.drawable.uni)
+    var selectedIcon = MutableLiveData<String>()
 
 
 
@@ -103,8 +94,7 @@ class MapViewModel : ViewModel() {
     private val _photoTaken = MutableLiveData<Bitmap?>()
     val photoTaken: LiveData<Bitmap?> = _photoTaken
 
-    private val _isMarkerSaved = MutableLiveData(false)
-    val isMarkerSaved: LiveData<Boolean> = _isMarkerSaved
+
 
     private val _navigationControl = MutableLiveData(false)
     val navigationControl = _navigationControl
@@ -234,6 +224,7 @@ class MapViewModel : ViewModel() {
         _showProgressBar.value = true
     }
     fun uploadImage(bitmap: Bitmap, onSuccess: (String) -> Unit) {
+
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
         val now = Date()
         val fileName = formatter.format(now)
@@ -268,13 +259,7 @@ class MapViewModel : ViewModel() {
         _snippetText.value = ""
         _photoTaken.value = null
     }
-    fun saveMarker() {
-        _isMarkerSaved.value = true
-    }
 
-    fun resetMarkerSaved() {
-        _isMarkerSaved.value = false
-    }
 
     fun setPhotoTaken(photo: Bitmap?) {
         _photoTaken.value = photo

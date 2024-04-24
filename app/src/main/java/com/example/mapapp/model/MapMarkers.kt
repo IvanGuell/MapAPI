@@ -4,10 +4,11 @@ data class MapMarkers(
     var position: LatLong,
     var title: String,
     var snippet: String,
+    var icon: String? = null,
     var photo: String? = null
 
 ){
-    constructor(): this(null, null, LatLong(0.0, 0.0), "", "", null)
+    constructor(): this(null, null, LatLong(), "", "", null, null)
 }
 
 data class LatLong(

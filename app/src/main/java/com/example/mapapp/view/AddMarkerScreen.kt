@@ -20,7 +20,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
@@ -37,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -52,11 +56,14 @@ fun AddMarkerScreen(
     mapViewModel: MapViewModel,
     onCloseBottomSheet: () -> Unit
 ) {
-    var title by remember { mutableStateOf("") }
-    var snippet by remember { mutableStateOf("") }
-    var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
-    val isMarkerSaved by mapViewModel.isMarkerSaved.observeAsState(false)
+
     val photoTaken by mapViewModel.photoTaken.observeAsState()
+
+
+
+    var selectedIcon by remember { mutableStateOf(mapViewModel.markerIcons[0]) }
+    var expanded by remember { mutableStateOf(false) }
+
 
     Surface(color = Color(0xFFFFFFFF)) {
         val context = LocalContext.current
@@ -98,7 +105,7 @@ fun AddMarkerScreen(
                 onValueChange = {
                     mapViewModel.setTitleText(it)
                 },
-                label = { Text("nombre del lugar") },
+                label = { Text("Nombre") },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -108,8 +115,37 @@ fun AddMarkerScreen(
                 onValueChange = {
                     mapViewModel.setSnippetText(it)
                 },
-                label = { Text("breve descripción") },
+                label = { Text("Descripción") },
                 modifier = Modifier.fillMaxWidth()
+            )
+            Button(
+                onClick = { expanded = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Select Icon")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                mapViewModel.markerIcons.forEach { icon ->
+                    DropdownMenuItem(onClick = {
+                        selectedIcon = icon
+                        mapViewModel.selectedIcon.value = icon.toString()
+                        expanded = false
+                    }) {
+                        Image(
+                            painter = painterResource(id = icon),
+                            contentDescription = null,
+                            modifier = Modifier.size(60.dp)
+                        )
+                    }
+                }
+            }
+            Image(
+                painter = painterResource(id = selectedIcon),
+                contentDescription = null,
+                modifier = Modifier.size(60.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
@@ -118,14 +154,31 @@ fun AddMarkerScreen(
 
                     val latLng = mapViewModel.getPosition()
                     val photoBitmap = mapViewModel.photoTaken.value
-                    mapViewModel.uploadImage(photoBitmap!!) { imageUrl ->
+                    if (photoBitmap != null) {
+                        mapViewModel.uploadImage(photoBitmap) { imageUrl ->
+                            val markerToAdd = MapMarkers(
+                                id = null,
+                                userId = FirebaseAuth.getInstance().currentUser?.uid,
+                                position = LatLong(latLng.latitude, latLng.longitude),
+                                title = title,
+                                snippet = snippet,
+                                icon = selectedIcon.toString(),
+                                photo = imageUrl
+                            )
+
+                            mapViewModel.addMarker(markerToAdd)
+                            navController.navigate(Routes.MapScreen.route)
+                            mapViewModel.resetInputFields()
+                        }
+                    } else {
                         val markerToAdd = MapMarkers(
                             id = null,
                             userId = FirebaseAuth.getInstance().currentUser?.uid,
                             position = LatLong(latLng.latitude, latLng.longitude),
                             title = title,
                             snippet = snippet,
-                            photo = imageUrl
+                            icon = selectedIcon.toString(),
+                            photo = "" // Usar una cadena vacía como URL de la imagen si photoBitmap es nulo
                         )
 
                         mapViewModel.addMarker(markerToAdd)
@@ -163,7 +216,7 @@ fun AddMarkerScreen(
                 if (showPermissionDenied) {
                     PermissionDeclinedScreen()
                 }
-                Text("Camera")
+                Text("Camara")
             }
             photoTaken?.let { photo ->
                 Image(

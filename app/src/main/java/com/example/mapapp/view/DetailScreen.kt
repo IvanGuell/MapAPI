@@ -4,7 +4,9 @@ package com.example.mapapp.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.mapapp.viewmodel.MapViewModel
@@ -34,16 +38,23 @@ fun DetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray))
-    {
-        Text(text = "Nombre: ${marker?.title}")
+            .background(Color.LightGray)
+    ) {
+        Row {
+            Image(
+                painter = painterResource(id = marker?.icon!!.toInt()),
+                contentDescription = "Marker Icon",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(text = "Nombre: ${marker?.title}")
+        }
         Text(text = "Descripción: ${marker?.snippet}")
 
         marker?.photo?.let { imageUrl ->
             AsyncImage(
                 model = imageUrl,
                 contentDescription = "Marker Image",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.size(64.dp),
                 contentScale = ContentScale.Crop
             )
         }
@@ -52,14 +63,6 @@ fun DetailScreen(
             Text("Editar")
         }
 
-        Button(onClick = {
-            if (marker != null) {
-                mapViewModel.removeMarker(marker)
-            }
-            navController.popBackStack()
-        }) {
-            Text("Eliminar")
-        }
 
         Button(onClick = { navController.popBackStack() }) {
             Text("Volver atrás")

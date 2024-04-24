@@ -89,7 +89,7 @@ fun RegisterScreen(navController: NavController, mapViewModel: MapViewModel) {
             }
         },
             enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
-            Text("Register")
+            Text("Registrarse")
         }
     }
 }
