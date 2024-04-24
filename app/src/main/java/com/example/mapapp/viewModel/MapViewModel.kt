@@ -271,6 +271,9 @@ class MapViewModel : ViewModel() {
 
     }
 
+    fun modifyProcessingPublic() {
+        modifyProcessing()
+    }
     fun changePosition(positionNueva: LatLng) {
         position = positionNueva
     }

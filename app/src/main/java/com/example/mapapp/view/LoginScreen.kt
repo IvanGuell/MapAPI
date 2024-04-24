@@ -9,6 +9,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,12 +26,14 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
     val userPrefs = UserPrefs(context)
     val storedUserData = userPrefs.getUserData.collectAsState(initial = emptyList())
 
+    val goToNext by mapViewModel.goToNext.observeAsState(false)
+
     if (storedUserData.value.isNotEmpty() && storedUserData.value[0] != ""
         && storedUserData.value[1] != "") {
-        mapViewModel.modifyProcesssing()
-        mapViewModel.login(storedUserData.value[0], storedUserData.value[1])
+        mapViewModel.modifyProcessingPublic()
+        mapViewModel.login(storedUserData.value[0], storedUserData.value[1], navController)
         if (goToNext) {
-            navigationController.navigate(Routes.MapScreen.route)
+            navController.navigate(Routes.MapScreen.route)
         }
     }
     Column {
@@ -46,10 +49,10 @@ fun LoginScreen(navController: NavController, mapViewModel: MapViewModel) {
         )
         Button(onClick = {
             mapViewModel.login(email, password, navController)
-            navController.navigate(Routes.MapScreen.route)
-
-        })
-        {
+            if (goToNext) {
+                navController.navigate(Routes.MapScreen.route)
+            }
+        }) {
             Text("Login")
         }
         Button(onClick = { navController.navigate(Routes.RegisterScreen.route) }) {
