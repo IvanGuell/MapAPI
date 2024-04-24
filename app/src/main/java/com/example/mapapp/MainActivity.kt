@@ -96,9 +96,10 @@ class MainActivity : ComponentActivity() {
 }
 
 val screensFromDrawer = listOf(
-    Routes.MapScreen,
-    Routes.List,
-    Routes.DetailScreen
+    Screens.DrawerScreens.Mapa,
+    Screens.DrawerScreens.Listar,
+    Screens.DrawerScreens.PositionMarker,
+    Screens.DrawerScreens.Logout
 )
 
 @Composable
@@ -159,7 +160,7 @@ fun MyDrawer(
                                         }
                                         delay(1000)
                                         withContext(Dispatchers.Main) {
-                                            navigationController.navigate(Routes.LoginScreen.route)
+                                            navController.navigate(Routes.LoginScreen.route)
  //                                           MapViewModel.setWelcome(false)
                                         }
                                     }
