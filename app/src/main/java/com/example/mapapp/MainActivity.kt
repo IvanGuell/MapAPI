@@ -40,12 +40,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mapapp.model.UserPrefs
 import com.example.mapapp.navigate.Routes
 import com.example.mapapp.navigate.Screens
 import com.example.mapapp.view.AddMarkerScreen
@@ -65,6 +67,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -102,11 +105,13 @@ val screensFromDrawer = listOf(
 fun MyDrawer(
     navController: NavController,
     mapViewModel: MapViewModel,
-    authenticator: FirebaseAuth
 ) {
     val scope = rememberCoroutineScope()
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val rememberMe by mapViewModel.rememberMe.observeAsState(false)
+
+    val context = LocalContext.current
+    val userPrefs = UserPrefs(context)
 
     ModalNavigationDrawer(
         drawerState = state,
