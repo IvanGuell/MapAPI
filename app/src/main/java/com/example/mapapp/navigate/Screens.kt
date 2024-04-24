@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
@@ -21,21 +22,28 @@ sealed class Screens(
                         (
                         Routes.MapScreen.route,
                         Icons.Filled.Home,
-                        ""
+                        "Map Screen"
                 )
 
                 object Listar : DrawerScreens
                         (
                         Routes.List.route,
                         Icons.Filled.List,
-                        ""
+                        "List SCreen"
                 )
 
                 object PositionMarker : DrawerScreens
                         (
                         Routes.DetailScreen.route,
                         Icons.Filled.FavoriteBorder,
-                        ""
+                        "PScreen"
+                )
+
+                object Logout : DrawerScreens
+                        (
+                        Routes.LoginScreen.route,
+                        Icons.Filled.Logout,
+                        "Logout"
                 )
         }
 }

@@ -4,6 +4,8 @@ import MapMarkers
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,7 +24,7 @@ import java.util.Locale
 
 class MapViewModel : ViewModel() {
 
-    private val authenticator  = FirebaseAuth.getInstance()
+    private val authenticator = FirebaseAuth.getInstance()
 
     private val _goToNext = MutableLiveData(false)
     val goToNext = _goToNext
@@ -35,6 +37,13 @@ class MapViewModel : ViewModel() {
 
     private val _showProgressBar = MutableLiveData(false)
     val showProgressBar = _showProgressBar
+
+    private val _rememberMe = MutableLiveData(false)
+    val rememberMe = _rememberMe
+
+
+    private val _showToast = MutableLiveData(false)
+    val showToast = _showToast
 
     private val _userList = MutableLiveData<List<User>>()
     val userList: LiveData<List<User>> = _userList
@@ -108,6 +117,8 @@ class MapViewModel : ViewModel() {
             _markerList.postValue(tempList)
         }
     }
+
+
     fun subscribeToUsers() {
         repository.getUsers().addSnapshotListener { value, error ->
             if (error != null) {
@@ -132,17 +143,23 @@ class MapViewModel : ViewModel() {
         }
     }
     fun register (username: String, password: String){
-        authenticator.createUserWithEmailAndPassword(username, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("Register", "User registered")
-                    _goToNext.value = true
-                } else {
-                    _goToNext.value = false
-                    Log.e("Register", "Error registering user ${ task.result }")
-                }
+        if(password.length < 6) {
+            _goToNext.value = false
+        } else {
+            authenticator.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("Register", "User registered")
+                        _goToNext.value = true
+                    } else {
+                        _goToNext.value = false
+                        _showToast.value = true
+                    }
+                        Log.e("Register", "Error registering user ${ task.result }")
+                    }
                     modifyProcessing()
-            }
+
+        }
     }
 
     fun login (username: String?, password: String?, navController: NavController) {
@@ -265,6 +282,7 @@ class MapViewModel : ViewModel() {
 
     fun addMarker(marker: MapMarkers) {
         repository.addMarker(marker)
+        subscribeToMarkers()
 //        val currentList = _markers.value.orEmpty().toMutableList()
 //        currentList.add(marker)
 //        _markers.value = currentList
@@ -272,11 +290,23 @@ class MapViewModel : ViewModel() {
 
     fun removeMarker(marker: MapMarkers) {
         repository.deleteMarker(marker.id!!)
+        subscribeToMarkers()
+
 //        val currentList = _markers.value.orEmpty().toMutableList()
 //        currentList.remove(marker)
 //        _markers.value = currentList
     }
+    fun setShowToast(value: Boolean) {
+        _showToast.value = value
+    }
 
+    fun logout() {
+        authenticator.signOut()
+        if (_rememberMe.value == false) {
+            _userId.value = ""
+            _loggedUser.value = ""
+        }
+    }
 }
 
 

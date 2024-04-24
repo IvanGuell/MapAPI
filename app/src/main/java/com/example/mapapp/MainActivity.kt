@@ -34,6 +34,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +47,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapapp.navigate.Routes
+import com.example.mapapp.navigate.Screens
 import com.example.mapapp.view.AddMarkerScreen
 import com.example.mapapp.view.GalleryScreen
 import com.example.mapapp.view.List
@@ -58,8 +61,13 @@ import com.example.mapapp.viewmodel.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : ComponentActivity() {
@@ -93,10 +101,12 @@ val screensFromDrawer = listOf(
 @Composable
 fun MyDrawer(
     navController: NavController,
-    mapViewModel: MapViewModel
+    mapViewModel: MapViewModel,
+    authenticator: FirebaseAuth
 ) {
     val scope = rememberCoroutineScope()
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val rememberMe by mapViewModel.rememberMe.observeAsState(false)
 
     ModalNavigationDrawer(
         drawerState = state,
@@ -130,10 +140,31 @@ fun MyDrawer(
                                 .width(160.dp),
                             shape = CircleShape,
                             onClick = {
-                                navController.navigate(screen.route)
+                                if (screen is Screens.DrawerScreens.Logout) {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        val data = userPrefs.getUserData.first()
+                                        if (rememberMe == true) {
+                                            println("entro en true")
+                                            userPrefs.saveUserData(data[0], data[1], "")
+                                        }
+                                        else userPrefs.saveUserData("", "", "")
+                                        println("datos: $data")
+                                        withContext(Dispatchers.Main) {
+                                            mapViewModel.logout()
+                                        }
+                                        delay(1000)
+                                        withContext(Dispatchers.Main) {
+                                            navigationController.navigate(Routes.LoginScreen.route)
+ //                                           MapViewModel.setWelcome(false)
+                                        }
+                                    }
+                                } else {
+                                    navController.navigate(screen.route)
+                                }
                                 scope.launch { state.close() }
                             }
                         ) {
+                            Text(screen.title)
                         }
                     }
                 }
