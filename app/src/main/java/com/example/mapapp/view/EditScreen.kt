@@ -24,6 +24,7 @@ fun EditScreen(
     navController: NavController,
     mapViewModel: MapViewModel
 ){
+
     val title = navController.currentBackStackEntry?.arguments?.getString("title")
     val marker = mapViewModel.markerList.value?.find { it.title == title }
     var newTitle by remember { mutableStateOf(marker?.title ?: "") }

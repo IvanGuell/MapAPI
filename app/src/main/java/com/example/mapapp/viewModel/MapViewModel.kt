@@ -1,6 +1,7 @@
 package com.example.mapapp.viewmodel
 
 import MapMarkers
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
@@ -28,6 +29,22 @@ import java.util.Locale
 
 
 class MapViewModel : ViewModel() {
+    private val _isDrawerVisible = MutableLiveData(true)
+    val isDrawerVisible: LiveData<Boolean> = _isDrawerVisible
+
+    fun setDrawerVisibility(isVisible: Boolean) {
+        _isDrawerVisible.value = isVisible
+    }
+    private val _isMenuButtonVisible = MutableLiveData(true)
+    val isMenuButtonVisible: LiveData<Boolean> = _isMenuButtonVisible
+
+    fun setMenuButtonVisibility(isVisible: Boolean) {
+        _isMenuButtonVisible.value = isVisible
+    }
+
+
+
+
 
     private val authenticator = FirebaseAuth.getInstance()
 
@@ -168,27 +185,31 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun login (username: String?, password: String?, navController: NavController, rememberMe: Boolean, userPrefs: UserPrefs){
-
-
-        authenticator.signInWithEmailAndPassword(username!!, password!!)
-
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _userId.value = task.result.user?.uid
-                    _loggedUser.value = task.result.user?.email?.split("@")?.get(0)
-                    _goToNext.value = true
-                    CoroutineScope(Dispatchers.IO).launch{
-                        userPrefs.saveUserData(username, password, if (rememberMe) "y" else "n")
+    fun login (username: String?, password: String?, navController: NavController, rememberMe: Boolean, userPrefs: UserPrefs, context: Context){
+        if (username != null && password != null) {
+            authenticator.signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        _userId.value = authenticator.currentUser?.uid
+                        _loggedUser.value = username!!
+                        if (rememberMe) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                userPrefs.saveUserData(username, password, "y")
+                            }
+                        }
+                        _goToNext.value = true
+                    } else {
+                        _goToNext.value = false
                     }
-
-                    Log.d("Login", "User logged in")
-                } else {
-                    _goToNext.value = false
-                    Log.e("Login", "Error logging in user ${task.result}")
+                    modifyProcessing()
                 }
-                modifyProcessing()
-            }
+                .addOnFailureListener { exception ->
+                    // Show a Toast with an error message
+                    Toast.makeText(context, "La contraseña o el password son incorrectos", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(context, "El campo email y el password no pueden ser nulos", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun getMarker(markerId: String){

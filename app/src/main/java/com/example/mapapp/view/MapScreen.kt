@@ -40,6 +40,7 @@ fun MapScreen(
     navController: NavController,
     mapViewModel: MapViewModel
 ) {
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     val showBottomSheet by mapViewModel.showBottomSheet.observeAsState(false)

@@ -27,6 +27,7 @@ fun DetailScreen(
     navController: NavController,
     mapViewModel: MapViewModel
 ){
+
     val title = navController.currentBackStackEntry?.arguments?.getString("title")
     val marker = mapViewModel.markerList.value?.find { it.title == title }
 
