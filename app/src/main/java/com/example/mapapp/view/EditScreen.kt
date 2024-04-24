@@ -52,15 +52,16 @@ fun EditScreen(
         }
         Button(onClick = {
             if (marker != null) {
-                mapViewModel.removeMarker(marker)
-//                val newPhoto = mapViewModel.photoTaken.value
-//                val newMarker = MapMarkers(
-//                    id = "0",
-//                    position = latLng,
-//                    title = title,
-//                    snippet = snippet,
-//                    photo = photoBitmap)
-//                mapViewModel.addMarker(newMarker)
+                val updatedMarker = MapMarkers(
+                    id = marker.id,
+                    userId = marker.userId,
+                    position = marker.position,
+                    title = newTitle,
+                    snippet = newSnippet,
+                    icon = marker.icon,
+                    photo = marker.photo
+                )
+                mapViewModel.updateMarker(updatedMarker)
             }
             navController.popBackStack()
         }) {

@@ -34,23 +34,24 @@ class Repository {
                 Log.d("REPOSITORIO", "MARCADOR AÑADIDO CON ID: ${documentReference.id}")
             }
     }
-//    fun editMarker(editMarker: MapMarkers){
-//        database.collection("markers")
-//            .document(editMarker.id)
-//            .set(
-//                hashMapOf(
-//                    "uid" to editMarker.id,
-//                    "position" to hashMapOf(
-//                        "latitude" to editMarker.position.latitude,
-//                        "longitude" to editMarker.position.longitude
-//                    ),
-//                    "title" to editMarker.title,
-//                    "snippet" to editMarker.snippet,
-//                    "photo" to editMarker.photo
-//                )
-//            )
-//    }
-
+    fun editMarker(editMarker: MapMarkers){
+        database.collection("markers")
+            .document(editMarker.id!!)
+            .set(
+                hashMapOf(
+                    "uid" to editMarker.id,
+                    "userId" to editMarker.userId,
+                    "position" to hashMapOf(
+                        "latitude" to editMarker.position.latitude,
+                        "longitude" to editMarker.position.longitude
+                    ),
+                    "title" to editMarker.title,
+                    "snippet" to editMarker.snippet,
+                    "icon" to editMarker.icon,
+                    "photo" to editMarker.photo
+                )
+            )
+    }
     fun deleteMarker(markerId: String){
         database.collection("markers")
             .document(markerId)

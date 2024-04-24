@@ -329,6 +329,10 @@ class MapViewModel : ViewModel() {
             _loggedUser.value = ""
         }
     }
+
+    fun updateMarker(marker: MapMarkers) {
+        repository.editMarker(marker)
+    }
 }
 
 
